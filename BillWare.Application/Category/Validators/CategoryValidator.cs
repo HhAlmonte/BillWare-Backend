@@ -1,4 +1,5 @@
 ﻿using BillWare.Application.Category.Entities;
+using BillWare.Application.Category.Models;
 using FluentValidation;
 
 namespace BillWare.Application.Category.Validators
@@ -7,7 +8,10 @@ namespace BillWare.Application.Category.Validators
     {
         public CategoryValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .NotNull()
+                .WithMessage("Name is required");
         }
     }
 }

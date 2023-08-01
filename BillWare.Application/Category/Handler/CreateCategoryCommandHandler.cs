@@ -20,18 +20,20 @@ namespace BillWare.Application.Category.Handler
 
         public async Task<CategoryVM> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var categoryToCreate = _mapper.Map<CategoryEntity>(request.Category);
-
-            var action = await _categoryReposity.Create(categoryToCreate);
-
-            if (action == null)
+            try
             {
-                throw new Exception("Error creating category");
+                var categoryToCreate = _mapper.Map<CategoryEntity>(request.Category);
+
+                var action = await _categoryReposity.Create(categoryToCreate);
+
+                var categoryVM = _mapper.Map<CategoryVM>(action);
+
+                return categoryVM;
             }
-
-            var categoryVM = _mapper.Map<CategoryVM>(action);
-
-            return categoryVM;
+            catch (CrudOperationException)
+            {
+                throw new CrudOperationException("Error creando la entidad Categoria. Hablar con el administrador del sistema.");
+            }
         }
     }
 }

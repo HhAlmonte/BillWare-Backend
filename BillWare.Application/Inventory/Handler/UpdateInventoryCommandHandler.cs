@@ -22,7 +22,7 @@ namespace BillWare.Application.Inventory.Handler
         {
             var inventoryToUpdate = _mapper.Map<InventoryEntity>(request.InventoryCommandModel);
 
-            var updatedInventory = await _inventoryRepository.Update(request.Id, inventoryToUpdate);
+            var updatedInventory = await _inventoryRepository.Update(inventoryToUpdate);
 
             var inventoryVM = _mapper.Map<InventoryVM>(updatedInventory);
 

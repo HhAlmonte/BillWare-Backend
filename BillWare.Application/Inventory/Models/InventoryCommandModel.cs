@@ -1,6 +1,8 @@
-﻿namespace BillWare.Application.Inventory.Models
+﻿using BillWare.Application.Shared.Models;
+
+namespace BillWare.Application.Inventory.Models
 {
-    public class InventoryCommandModel
+    public class InventoryCommandModel : BaseViewModel
     {
         public string Name { get; set; }
         public string Description { get; set; }

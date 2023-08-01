@@ -4,6 +4,7 @@ using BillWare.Application.Inventory.Query;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace BillWare.API.Controllers
 {
@@ -18,18 +19,18 @@ namespace BillWare.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetInventoryById/{id}")]
-        public async Task<ActionResult<InventoryVM>> GetInventoryById(int id)
+        [HttpGet("GetInventoryWithSearch")]
+        public async Task<ActionResult<InventoryVM>> GetInventoryById(string search, int pageIndex, int pageSize)
         {
-            var inventory = await _mediator.Send(new GetInventoryByIdQuery(id));
+            var inventory = await _mediator.Send(new GetInventoryWithSearchQuery(search, pageIndex, pageSize));
 
             return Ok(inventory);
         }
 
         [HttpGet("GetInventoriesPaged")]
-        public async Task<ActionResult<PaginationResult<InventoryVM>>> GetInventoriesPaged(int page, int pageSize)
+        public async Task<ActionResult<PaginationResult<InventoryVM>>> GetInventoriesPaged(int pageIndex, int pageSize)
         {
-            var inventories = await _mediator.Send(new GetAllInventoryQuery(page, pageSize));
+            var inventories = await _mediator.Send(new GetAllInventoryQuery(pageIndex, pageSize));
 
             return Ok(inventories);
         }
@@ -37,15 +38,30 @@ namespace BillWare.API.Controllers
         [HttpPost("CreateInventory")]
         public async Task<ActionResult<InventoryVM>> CreateInventory(InventoryCommandModel inventory)
         {
-            var createdInventory = await _mediator.Send(new CreateInventoryCommand(inventory));
+            try
+            {
+                var createdInventory = await _mediator.Send(new CreateInventoryCommand(inventory));
 
-            return Ok(createdInventory);
+                return Ok(createdInventory);
+            }
+            catch (CrudOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
+            }
         }
 
-        [HttpPut("UpdateInventory/{id}")]
-        public async Task<ActionResult<InventoryVM>> UpdateInventory(int id, InventoryCommandModel inventory)
+        [HttpPut("UpdateInventory")]
+        public async Task<ActionResult<InventoryVM>> UpdateInventory(InventoryCommandModel inventory)
         {
-            var updatedInventory = await _mediator.Send(new UpdateInventoryCommand(inventory, id));
+            var updatedInventory = await _mediator.Send(new UpdateInventoryCommand(inventory));
 
             return Ok(updatedInventory);
         }
@@ -53,9 +69,20 @@ namespace BillWare.API.Controllers
         [HttpDelete("DeleteInventory/{id}")]
         public async Task<ActionResult> DeleteInventory(int id)
         {
-            await _mediator.Send(new DeleteInventoryCommand(id));
+            try
+            {
+                await _mediator.Send(new DeleteInventoryCommand(id));
 
-            return Ok();
+                return Ok();
+            }
+            catch (CrudOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
+            }
         }
     }
 }

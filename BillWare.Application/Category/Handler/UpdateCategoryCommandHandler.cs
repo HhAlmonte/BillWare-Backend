@@ -22,7 +22,7 @@ namespace BillWare.Application.Category.Handler
         {
             var categoryToUpdate = _mapper.Map<CategoryEntity>(request.Category);
 
-            var action = await _categoryRepository.Update(request.Id, categoryToUpdate);
+            var action = await _categoryRepository.Update(categoryToUpdate);
 
             return _mapper.Map<CategoryVM>(action);
         }

@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using BillWare.Application.Shared;
+﻿using BillWare.Application.Shared;
 using BillWare.Application.Shared.Entities;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BillWare.Infrastructure.Repository
 {
@@ -39,11 +39,11 @@ namespace BillWare.Infrastructure.Repository
             return true;
         }
 
-        public async Task<TEntity> Get(int id)
+        public async Task<TEntity> Update(TEntity entity)
         {
-            var entity = await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
+            _dbSet.Update(entity);
 
-            if (entity == null) throw new Exception("Entity not found");
+            await _dbContext.SaveChangesAsync();
 
             return entity;
         }
@@ -55,15 +55,66 @@ namespace BillWare.Infrastructure.Repository
             return entityList;
         }
 
-        public async Task<TEntity> Update(int id, TEntity entity)
+        public async Task<PaginationResult<TEntity>> GetWithSearch(string searchValue, int pageIndex, int pageSize)
         {
-            var existingEntity = await Get(id);
+            var query = _dbSet.AsQueryable();
 
-            if (id != existingEntity.Id) throw new Exception("Id doesn't match");
+            int intValue;
+            bool isInt = int.TryParse(searchValue, out intValue);
 
-            _dbSet.Update(entity);
+            Expression<Func<TEntity, bool>> condition;
+            if (isInt)
+            {
+                condition = BuildIntegerCondition(searchValue);
+            }
+            else
+            {
+                condition = BuildStringCondition(searchValue);
+            }
 
-            await _dbContext.SaveChangesAsync();
+            query = query.Where(condition);
+
+            var result = await query.GetPage(pageIndex, pageSize);
+
+            return result;
+        }
+
+        private Expression<Func<TEntity, bool>> BuildIntegerCondition(string searchValue)
+        {
+            int intValue = int.Parse(searchValue);
+
+            var parameter = Expression.Parameter(typeof(TEntity), "x");
+            var property = Expression.Property(parameter, "Id");
+            var constant = Expression.Constant(intValue, typeof(int));
+            var equality = Expression.Equal(property, constant);
+
+            return Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
+        }
+
+        private Expression<Func<TEntity, bool>> BuildStringCondition(string searchValue)
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "x");
+            var properties = typeof(TEntity).GetProperties().Where(p => p.PropertyType == typeof(string));
+            var containsMethods = typeof(string).GetMethods().Where(m => m.Name == "Contains");
+
+            Expression orCondition = Expression.Constant(false);
+            foreach (var property in properties)
+            {
+                var propertyExpr = Expression.Property(parameter, property);
+                var containsMethod = containsMethods.First(m => m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(string));
+                var callMethodExpr = Expression.Call(propertyExpr, containsMethod, Expression.Constant(searchValue));
+
+                orCondition = Expression.OrElse(orCondition, callMethodExpr);
+            }
+
+            return Expression.Lambda<Func<TEntity, bool>>(orCondition, parameter);
+        }
+
+        private async Task<TEntity> Get(int id)
+        {
+            var entity = await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
+
+            if (entity == null) throw new Exception("Entity not found");
 
             return entity;
         }

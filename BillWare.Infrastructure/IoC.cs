@@ -1,4 +1,6 @@
-﻿using BillWare.Application.Shared;
+﻿using BillWare.Application.Interfaces;
+using BillWare.Application.Repositories;
+using BillWare.Application.Shared;
 using BillWare.Infrastructure.Context;
 using BillWare.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +18,13 @@ namespace BillWare.Infrastructure
 
             services.AddScoped(typeof(IBaseCrudRepository<>), typeof(BaseCrudRepository<>));
 
+            services.AddScoped<IVehicleEntranceRepository, VehicleEntranceRepository>();
+
             services.AddScoped<IBillWareDbContext, BillWareDbContext>();
+
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+
+            services.AddScoped<IBillingRepository, BillingRepository>();
 
             return services;
         }

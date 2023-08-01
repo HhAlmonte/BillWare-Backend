@@ -1,6 +1,7 @@
 ﻿using BillWare.Application.Category.Command;
 using BillWare.Application.Category.Models;
 using BillWare.Application.Category.Query;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,17 +16,17 @@ namespace BillWare.API.Controllers
         public CategoryController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("GetCategoriesPaged")]
-        public async Task<IActionResult> Get([FromQuery] GetAllCategoryQuery query)
+        public async Task<IActionResult> Get(int pageIndex, int pageSize = 5)
         {
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetAllCategoryQuery(pageIndex, pageSize));
 
             return Ok(result);
         }
 
-        [HttpGet("GetCategoryById/{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("GetCategoryWithSearch")]
+        public async Task<IActionResult> Get(string search, int pageIndex, int pageSize)
         {
-            var result = await _mediator.Send(new GetCategoryByIdQuery(id));
+            var result = await _mediator.Send(new GetCategoryWithSearchQuery(search, pageIndex, pageSize));
 
             return Ok(result);
         }
@@ -33,15 +34,30 @@ namespace BillWare.API.Controllers
         [HttpPost("CreateCategory")]
         public async Task<IActionResult> Post([FromBody] CategoryCommandModel command)
         {
-            var result = await _mediator.Send(new CreateCategoryCommand(command));
+            try
+            {
+                var result = await _mediator.Send(new CreateCategoryCommand(command));
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (CrudOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno en el servidor.");
+            }
         }
 
-        [HttpPut("UpdateCategory/{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CategoryCommandModel command)
+        [HttpPut("UpdateCategory")]
+        public async Task<IActionResult> Put([FromBody] CategoryCommandModel command)
         {
-            var result = await _mediator.Send(new UpdateCategoryCommand(id, command));
+            var result = await _mediator.Send(new UpdateCategoryCommand(command));
 
             return Ok(result);
         }
@@ -49,9 +65,20 @@ namespace BillWare.API.Controllers
         [HttpDelete("DeleteCategory/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _mediator.Send(new DeleteCategoryCommand(id));
+            try
+            {
+                var result = await _mediator.Send(new DeleteCategoryCommand(id));
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (CrudOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno en el servidor.");
+            }
         }
     }
 }

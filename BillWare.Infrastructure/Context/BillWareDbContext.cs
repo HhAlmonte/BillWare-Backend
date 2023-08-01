@@ -1,7 +1,8 @@
-﻿using BillWare.Application.Category.Entities;
-using BillWare.Application.Costumer.Entities;
+﻿using BillWare.Application.Billing.Entities;
+using BillWare.Application.Category.Entities;
 using BillWare.Application.Inventory.Entities;
 using BillWare.Application.Shared.Entities;
+using BillWare.Application.VehiculoEntrance.Entities;
 using BillWare.Infrastructure.Context.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +21,13 @@ namespace BillWare.Infrastructure.Context
         }
 
         public DbSet<CategoryEntity> Categories { get; set; }
-        public DbSet<CostumerEntity> Costumers { get; set; }
+        public DbSet<VehicleEntranceEntity> VehiculoEntrance { get; set; }
+        public DbSet<Costumer> Costumers { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<InventoryEntity> Inventory { get; set; }
+        public DbSet<BillingEntity> Billings { get; set; }
+        public DbSet<BillingItem> BillingItems { get; set; }
+        public DbSet<BillingType> BillingTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

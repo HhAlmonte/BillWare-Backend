@@ -1,8 +1,10 @@
-﻿namespace BillWare.Application.Category.Models
+﻿using BillWare.Application.Shared.Models;
+
+namespace BillWare.Application.Category.Models
 {
-    public class CategoryCommandModel
+    public class CategoryCommandModel : BaseViewModel
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }
