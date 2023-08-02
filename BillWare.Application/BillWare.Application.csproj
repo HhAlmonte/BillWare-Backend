@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Billing\Handler\" />
-    <Folder Include="Billing\Query\" />
     <Folder Include="Vehicle\Validators\" />
   </ItemGroup>
 

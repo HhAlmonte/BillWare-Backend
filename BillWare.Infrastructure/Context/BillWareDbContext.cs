@@ -27,7 +27,6 @@ namespace BillWare.Infrastructure.Context
         public DbSet<InventoryEntity> Inventory { get; set; }
         public DbSet<BillingEntity> Billings { get; set; }
         public DbSet<BillingItem> BillingItems { get; set; }
-        public DbSet<BillingType> BillingTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

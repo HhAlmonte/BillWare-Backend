@@ -1,4 +1,5 @@
 ﻿using BillWare.Application.Shared.Entities;
+using BillWare.Application.Shared.Models;
 
 namespace BillWare.Application.Billing.Entities
 {
@@ -6,8 +7,7 @@ namespace BillWare.Application.Billing.Entities
     {
         public string FullName { get; set; }
 
-        public int BillingTypeId { get; set; }
-        public BillingType BillingType { get; set; }
+        public BillingTypeEnum BillingType { get; set; }
 
         public List<BillingItem> BillingItems { get; set; }
 
