@@ -26,6 +26,8 @@ namespace BillWare.Infrastructure
 
             services.AddScoped<IBillingRepository, BillingRepository>();
 
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+
             return services;
         }
     }

@@ -4,6 +4,7 @@ using BillWare.Application.Billing.Entities;
 using BillWare.Application.Billing.Models;
 using BillWare.Application.Interfaces;
 using BillWare.Application.Shared;
+using BillWare.Application.Shared.Models;
 using MediatR;
 
 namespace BillWare.Application.Billing.Handler
@@ -11,10 +12,12 @@ namespace BillWare.Application.Billing.Handler
     public class CreateBillingCommandHandler : IRequestHandler<CreateBillingCommand, BillingModel>
     {
         private readonly IBillingRepository _billingRepository;
+        private readonly IInventoryRepository _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public CreateBillingCommandHandler(IBillingRepository billingRepository, IMapper mapper)
+        public CreateBillingCommandHandler(IBillingRepository billingRepository, IInventoryRepository inventoryRepository, IMapper mapper)
         {
+            _inventoryRepository = inventoryRepository;
             _billingRepository = billingRepository;
             _mapper = mapper;
         }
@@ -28,6 +31,18 @@ namespace BillWare.Application.Billing.Handler
                 var billingCreated = await _billingRepository.Create(billingToCreate);
 
                 if (billingCreated == null) throw new CrudOperationException("Hubo un error procesando la factura.");
+
+                if(billingCreated.BillingStatus != BillingStatus.Cancelled)
+                {
+                    foreach (var product in billingCreated.BillingItems)
+                    {
+                        var currentQuantity = await _inventoryRepository.GetCurrentQuantity(product.ItemId);
+
+                        var newQuantity = currentQuantity - product.Quantity;
+
+                        await _inventoryRepository.UpdateQuantity(newQuantity, product.ItemId);
+                    }
+                }
 
                 return _mapper.Map<BillingModel>(billingCreated);
             }

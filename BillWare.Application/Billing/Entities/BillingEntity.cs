@@ -7,6 +7,8 @@ namespace BillWare.Application.Billing.Entities
     {
         public string FullName { get; set; }
 
+        public BillingStatus BillingStatus { get; set; }
+
         public BillingTypeEnum BillingType { get; set; }
 
         public List<BillingItem> BillingItems { get; set; }

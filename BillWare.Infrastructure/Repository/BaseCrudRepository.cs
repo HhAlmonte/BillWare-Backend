@@ -110,7 +110,7 @@ namespace BillWare.Infrastructure.Repository
             return Expression.Lambda<Func<TEntity, bool>>(orCondition, parameter);
         }
 
-        private async Task<TEntity> Get(int id)
+        public async Task<TEntity> Get(int id)
         {
             var entity = await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
 
