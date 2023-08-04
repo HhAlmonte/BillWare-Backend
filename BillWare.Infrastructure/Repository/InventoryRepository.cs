@@ -27,12 +27,13 @@ namespace BillWare.Infrastructure.Repository
 
         public async Task<bool> UpdateQuantity(int id, int quantity)
         {
-            var inventory = await _dbSet.FindAsync(id);
-            if (inventory == null)
-                return false;
+            var inventory = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (inventory == null) return false;
 
             inventory.Quantity = quantity;
-            await _context.SaveChangesAsync();
+
+            await Update(inventory);
 
             return true;
         }

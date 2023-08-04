@@ -28,6 +28,8 @@ namespace BillWare.Application.Billing.Handler
             {
                 var billingToCreate = _mapper.Map<BillingEntity>(request.Billing);
 
+                billingToCreate.TotalPrice = billingToCreate.BillingItems.Sum(x => x.Price * x.Quantity);
+
                 var billingCreated = await _billingRepository.Create(billingToCreate);
 
                 if (billingCreated == null) throw new CrudOperationException("Hubo un error procesando la factura.");
@@ -40,7 +42,7 @@ namespace BillWare.Application.Billing.Handler
 
                         var newQuantity = currentQuantity - product.Quantity;
 
-                        await _inventoryRepository.UpdateQuantity(newQuantity, product.ItemId);
+                        await _inventoryRepository.UpdateQuantity(product.ItemId, newQuantity);
                     }
                 }
 

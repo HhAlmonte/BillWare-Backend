@@ -17,12 +17,10 @@ namespace BillWare.Application.Billing.Handler
 
         public async Task<bool> Handle(DeleteBillingCommand request, CancellationToken cancellationToken)
         {
-            var billingDeleted = await _billingRepository.Delete(request.Id);
+            var billing = await _billingRepository.GetBilling(request.Id);
 
-            if(billingDeleted)
+            if (billing != null)
             {
-                var billing = await _billingRepository.Get(request.Id);
-
                 foreach (var item in billing.BillingItems) 
                 {
                     var inventory = await _inventoryRepository.GetCurrentQuantity(item.ItemId);
@@ -30,6 +28,8 @@ namespace BillWare.Application.Billing.Handler
                     await _inventoryRepository.UpdateQuantity(item.ItemId ,newQuantity);
                 }
             }
+
+            var billingDeleted = await _billingRepository.Delete(request.Id);
 
             return billingDeleted;
         }

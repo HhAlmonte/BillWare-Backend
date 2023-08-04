@@ -30,34 +30,40 @@ namespace BillWare.Application.Billing.Handler
         {
             var billing = _mapper.Map<BillingEntity>(request.Billing);
 
+            billing.TotalPrice = billing.BillingItems.Sum(x => x.Price * x.Quantity);
+
+            var updatedBilling = await _billingRepository.Update(billing);
+
             foreach (var item in billing.BillingItems)
             {
                 var getCurrentItemQuantityInvoice = await _billingItemRepository.Get(item.Id);
 
                 if (item.Quantity != getCurrentItemQuantityInvoice.Quantity)
                 {
+                    var quantityToAddOrRemove = item.Quantity - getCurrentItemQuantityInvoice.Quantity;
+
                     if (getCurrentItemQuantityInvoice.Quantity < item.Quantity)
                     {
                         var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.ItemId);
-
-                        var newQuantity = currentInventoryQuantity - (item.Quantity - getCurrentItemQuantityInvoice.Quantity);
-
-                        await _inventoryRepository.UpdateQuantity(item.ItemId, newQuantity);
+                        if (currentInventoryQuantity >= quantityToAddOrRemove)
+                        {
+                            await _inventoryRepository.UpdateQuantity(item.ItemId, currentInventoryQuantity - quantityToAddOrRemove);
+                        }
+                        else
+                        {
+                            throw new Exception("No hay suficiente inventario disponible para agregar la cantidad especificada.");
+                        }
                     }
                     else
                     {
                         var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.ItemId);
-
-                        var newQuantity = currentInventoryQuantity + (getCurrentItemQuantityInvoice.Quantity - item.Quantity);
-
-                        await _inventoryRepository.UpdateQuantity(item.ItemId, newQuantity);
+                        await _inventoryRepository.UpdateQuantity(item.ItemId, currentInventoryQuantity + quantityToAddOrRemove);
                     }
                 }
             }
 
-            var updatedBilling = await _billingRepository.Update(billing);
-
             return _mapper.Map<BillingModel>(updatedBilling);
         }
+
     }
 }
