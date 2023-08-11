@@ -23,9 +23,9 @@ namespace BillWare.Application.Billing.Handler
             {
                 foreach (var item in billing.BillingItems) 
                 {
-                    var inventory = await _inventoryRepository.GetCurrentQuantity(item.ItemId);
+                    var inventory = await _inventoryRepository.GetCurrentQuantity(item.Code);
                     var newQuantity = inventory += item.Quantity;
-                    await _inventoryRepository.UpdateQuantity(item.ItemId ,newQuantity);
+                    await _inventoryRepository.UpdateQuantity(item.Code ,newQuantity);
                 }
             }
 

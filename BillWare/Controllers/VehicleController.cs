@@ -1,5 +1,5 @@
 ﻿using BillWare.Application.Vehicle.Command;
-using BillWare.Application.VehiculoEntrance.Models;
+using BillWare.Application.Vehicle.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

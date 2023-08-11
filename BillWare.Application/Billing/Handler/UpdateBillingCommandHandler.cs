@@ -11,13 +11,13 @@ namespace BillWare.Application.Billing.Handler
     public class UpdateBillingCommandHandler : IRequestHandler<UpdateBillingCommand, BillingModel>
     {
         private readonly IBillingRepository _billingRepository;
-        private readonly IBaseCrudRepository<BillingItem> _billingItemRepository;
+        private readonly IBaseCrudRepository<BillingItemEntity> _billingItemRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IMapper _mapper;
 
         public UpdateBillingCommandHandler(IBillingRepository billingRepository, 
                                            IInventoryRepository inventoryRepository,
-                                           IBaseCrudRepository<BillingItem> billingItemRepository,
+                                           IBaseCrudRepository<BillingItemEntity> billingItemRepository,
                                            IMapper mapper)
         {
             _billingItemRepository = billingItemRepository;
@@ -44,10 +44,10 @@ namespace BillWare.Application.Billing.Handler
 
                     if (getCurrentItemQuantityInvoice.Quantity < item.Quantity)
                     {
-                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.ItemId);
+                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.Code);
                         if (currentInventoryQuantity >= quantityToAddOrRemove)
                         {
-                            await _inventoryRepository.UpdateQuantity(item.ItemId, currentInventoryQuantity - quantityToAddOrRemove);
+                            await _inventoryRepository.UpdateQuantity(item.Code, currentInventoryQuantity - quantityToAddOrRemove);
                         }
                         else
                         {
@@ -56,8 +56,8 @@ namespace BillWare.Application.Billing.Handler
                     }
                     else
                     {
-                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.ItemId);
-                        await _inventoryRepository.UpdateQuantity(item.ItemId, currentInventoryQuantity + quantityToAddOrRemove);
+                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.Code);
+                        await _inventoryRepository.UpdateQuantity(item.Code, currentInventoryQuantity + quantityToAddOrRemove);
                     }
                 }
             }

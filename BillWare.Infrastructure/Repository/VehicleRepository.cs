@@ -1,6 +1,6 @@
 ﻿using BillWare.Application.Interfaces;
 using BillWare.Application.Shared;
-using BillWare.Application.VehiculoEntrance.Entities;
+using BillWare.Application.Vehicle.Entities;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,15 +9,15 @@ namespace BillWare.Infrastructure.Repository
     public class VehicleRepository : IVehicleRepository
     {
         private readonly IBillWareDbContext _context;
-        private readonly DbSet<Vehicle> _dbSet;
+        private readonly DbSet<VehicleEntity> _dbSet;
 
         public VehicleRepository(IBillWareDbContext context)
         {
             _context = context;
-            _dbSet = _context.GetDbSet<Vehicle>();
+            _dbSet = _context.GetDbSet<VehicleEntity>();
         }
 
-        public async Task<Vehicle> CreateVehicle(Vehicle vehicle)
+        public async Task<VehicleEntity> CreateVehicle(VehicleEntity vehicle)
         {
             await _dbSet.AddAsync(vehicle);
 
@@ -39,7 +39,7 @@ namespace BillWare.Infrastructure.Repository
             return true;
         }
 
-        public async Task<Vehicle> UpdateVehicle(Vehicle vehicle)
+        public async Task<VehicleEntity> UpdateVehicle(VehicleEntity vehicle)
         {
             _dbSet.Update(vehicle);
 

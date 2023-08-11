@@ -20,7 +20,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetVehicleEntrancePaged")]
         public async Task<ActionResult<PaginationResult<VehiculoEntranceVM>>> Get(int pageIndex = 1, int pageSize = 10)
         {
-            var result = await _mediator.Send(new GetAllVehiculoEntranceQuery(pageIndex, pageSize));
+            var result = await _mediator.Send(new GetVehiclesEntrancePagedQuery(pageIndex, pageSize));
 
             return Ok(result);
         }
@@ -28,7 +28,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetVehicleEntranceWithParams")]
         public async Task<ActionResult<PaginationResult<VehiculoEntranceVM>>> Get(int pageIndex, int pageSize, string fullName = null)
         {
-            var result = await _mediator.Send(new GetVehiculoEntranceWithParamsQuery(pageIndex, pageSize, fullName));
+            var result = await _mediator.Send(new GetVehiclesEntrancePagedWithParamsQuery(pageIndex, pageSize, fullName));
 
             return Ok(result);
         }
@@ -36,7 +36,7 @@ namespace BillWare.API.Controllers
         [HttpPost("CreateVehicleEntrance")]
         public async Task<ActionResult<VehiculoEntranceVM>> Post([FromBody] VehiculoEntranceCommandModel costumer)
         {
-            var result = await _mediator.Send(new CreateVehiculoEntranceCommand(costumer));
+            var result = await _mediator.Send(new CreateVehicleEntranceCommand(costumer));
 
             return Ok(result);
         }
@@ -44,7 +44,7 @@ namespace BillWare.API.Controllers
         [HttpDelete("DeleteVehicleEntrance/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteVehiculoEntranceCommand(id));
+            await _mediator.Send(new DeleteVehicleEntranceCommand(id));
 
             return Ok();
         }
@@ -52,7 +52,7 @@ namespace BillWare.API.Controllers
         [HttpPut("UpdateVehicleEntrance")]
         public async Task<ActionResult<VehiculoEntranceVM>> Put([FromBody] VehiculoEntranceCommandModel costumer)
         {
-            var result = await _mediator.Send(new UpdateVehiculoEntranceCommand(costumer));
+            var result = await _mediator.Send(new UpdateVehicleEntranceCommand(costumer));
 
             return Ok(result);
         }

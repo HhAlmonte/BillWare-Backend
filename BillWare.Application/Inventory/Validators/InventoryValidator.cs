@@ -11,7 +11,7 @@ namespace BillWare.Application.Inventory.Validators
             RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required");
             RuleFor(x => x.Model).NotEmpty().WithMessage("Model is required");
             RuleFor(x => x.Price).NotEmpty().WithMessage("Price is required");
-            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("Category is required");
+            RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
         }
     }
 }

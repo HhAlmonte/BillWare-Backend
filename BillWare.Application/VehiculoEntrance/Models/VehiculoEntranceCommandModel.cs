@@ -1,5 +1,5 @@
 ﻿using BillWare.Application.Shared.Models;
-using BillWare.Application.VehiculoEntrance.Models;
+using BillWare.Application.Vehicle.Models;
 
 namespace BillWare.Application.Costumer.Models
 {

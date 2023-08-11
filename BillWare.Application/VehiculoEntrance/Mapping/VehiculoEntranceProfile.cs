@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using BillWare.Application.Costumer.Entities;
 using BillWare.Application.Costumer.Models;
+using BillWare.Application.Vehicle.Entities;
+using BillWare.Application.Vehicle.Models;
 using BillWare.Application.VehiculoEntrance.Entities;
-using BillWare.Application.VehiculoEntrance.Models;
 
 namespace BillWare.Application.VehiculoEntrance.Mapping
 {
@@ -17,8 +19,8 @@ namespace BillWare.Application.VehiculoEntrance.Mapping
 
             CreateMap<VehiculoEntranceCommandModel, VehicleEntranceEntity>().ReverseMap();
 
-            CreateMap<CostumerModel, Entities.Costumer>().ReverseMap();
-            CreateMap<VehicleModel, Entities.Vehicle>().ReverseMap();
+            CreateMap<CostumerModel, CostumerEntity>().ReverseMap();
+            CreateMap<VehicleModel, VehicleEntity>().ReverseMap();
         }
     }
 }

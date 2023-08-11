@@ -38,11 +38,11 @@ namespace BillWare.Application.Billing.Handler
                 {
                     foreach (var product in billingCreated.BillingItems)
                     {
-                        var currentQuantity = await _inventoryRepository.GetCurrentQuantity(product.ItemId);
+                        var currentQuantity = await _inventoryRepository.GetCurrentQuantity(product.Code);
 
                         var newQuantity = currentQuantity - product.Quantity;
 
-                        await _inventoryRepository.UpdateQuantity(product.ItemId, newQuantity);
+                        await _inventoryRepository.UpdateQuantity(product.Code, newQuantity);
                     }
                 }
 

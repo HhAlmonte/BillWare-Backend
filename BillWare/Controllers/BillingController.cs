@@ -1,6 +1,7 @@
 ﻿using BillWare.Application.Billing.Command;
 using BillWare.Application.Billing.Models;
 using BillWare.Application.Billing.Query;
+using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,11 @@ namespace BillWare.API.Controllers
     public class BillingController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IBillingRepository _billingRepository;
 
-        public BillingController(IMediator mediator)
+        public BillingController(IMediator mediator, IBillingRepository billingRepository)
         {
+            _billingRepository = billingRepository;
             this.mediator = mediator;
         }
 
@@ -52,6 +55,23 @@ namespace BillWare.API.Controllers
             }
         }
 
+        [HttpGet("GetBillingsWithSearchPaged")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetBillingsWithSearch(string search, int pageIndex, int pageSize)
+        {
+            try
+            {
+                var billings = await mediator.Send(new GetBillingsWithSearchQuery(search, pageIndex, pageSize));
+
+                return Ok(billings);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("DeleteBilling")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -79,6 +99,23 @@ namespace BillWare.API.Controllers
                 await mediator.Send(new UpdateBillingCommand(model));
 
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetInvoiceNumber")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetInvoiceNumber()
+        {
+            try
+            {
+                var invoiceNumber = await _billingRepository.GetInvoiceNumber();
+
+                return Ok(invoiceNumber);
             }
             catch (Exception ex)
             {

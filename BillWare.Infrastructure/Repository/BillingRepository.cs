@@ -31,5 +31,12 @@ namespace BillWare.Infrastructure.Repository
 
             return billings;
         }
+
+        public async Task<int> GetInvoiceNumber()
+        {
+            var lastInvoiceNumber = await _dbSet.OrderBy(x => x.Id).LastAsync();
+
+            return lastInvoiceNumber.Id;
+        }
     }
 }

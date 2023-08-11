@@ -8,11 +8,11 @@ namespace BillWare.Application.Billing.Handler
 {
     public class DeleteBillingItemCommandHandler : IRequestHandler<DeleteBillingItemCommand, bool>
     {
-        private readonly IBaseCrudRepository<BillingItem> _billingItemRepository;
+        private readonly IBaseCrudRepository<BillingItemEntity> _billingItemRepository;
         private readonly IBillingRepository _billingRepository;
         private readonly IInventoryRepository _inventoryRepository;
 
-        public DeleteBillingItemCommandHandler(IBaseCrudRepository<BillingItem> billingItemRepository
+        public DeleteBillingItemCommandHandler(IBaseCrudRepository<BillingItemEntity> billingItemRepository
                                                ,IInventoryRepository inventoryRepository,
                                                 IBillingRepository billingRepository)
         {
@@ -25,11 +25,11 @@ namespace BillWare.Application.Billing.Handler
         {
             var billingItemQuantity = await _billingItemRepository.Get(request.Id);
 
-            var inventoryQuantity = await _inventoryRepository.GetCurrentQuantity(billingItemQuantity.ItemId);
+            var inventoryQuantity = await _inventoryRepository.GetCurrentQuantity(billingItemQuantity.Code);
 
             var newQuantity = inventoryQuantity += billingItemQuantity.Quantity;
 
-            await _inventoryRepository.UpdateQuantity(billingItemQuantity.ItemId, newQuantity);
+            await _inventoryRepository.UpdateQuantity(billingItemQuantity.Code, newQuantity);
 
             var billingDeleted = await _billingItemRepository.Delete(request.Id);
 

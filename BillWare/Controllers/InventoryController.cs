@@ -22,7 +22,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetInventoryWithSearch")]
         public async Task<ActionResult<InventoryVM>> GetInventoryById(string search, int pageIndex, int pageSize)
         {
-            var inventory = await _mediator.Send(new GetInventoryWithSearchQuery(search, pageIndex, pageSize));
+            var inventory = await _mediator.Send(new GetInventoriesPagedWithSearchQuery(search, pageIndex, pageSize));
 
             return Ok(inventory);
         }
@@ -30,7 +30,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetInventoriesPaged")]
         public async Task<ActionResult<PaginationResult<InventoryVM>>> GetInventoriesPaged(int pageIndex, int pageSize)
         {
-            var inventories = await _mediator.Send(new GetAllInventoryQuery(pageIndex, pageSize));
+            var inventories = await _mediator.Send(new GetInventoriesPagedQuery(pageIndex, pageSize));
 
             return Ok(inventories);
         }

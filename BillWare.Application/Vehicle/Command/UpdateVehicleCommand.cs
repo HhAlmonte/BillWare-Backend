@@ -1,4 +1,4 @@
-﻿using BillWare.Application.VehiculoEntrance.Models;
+﻿using BillWare.Application.Vehicle.Models;
 using MediatR;
 
 namespace BillWare.Application.Vehicle.Command

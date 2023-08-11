@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BillWare.Application.Interfaces;
 using BillWare.Application.Vehicle.Command;
-using BillWare.Application.VehiculoEntrance.Models;
+using BillWare.Application.Vehicle.Entities;
+using BillWare.Application.Vehicle.Models;
 using MediatR;
 
 namespace BillWare.Application.Vehicle.Handler
@@ -19,7 +20,7 @@ namespace BillWare.Application.Vehicle.Handler
 
         public async Task<VehicleModel> Handle(CreateVehicleCommand request, CancellationToken cancellationToken)
         {
-            var vehicle = _mapper.Map<VehiculoEntrance.Entities.Vehicle>(request.VehicleModel);
+            var vehicle = _mapper.Map<VehicleEntity>(request.VehicleModel);
 
             var result = await _vehicleRepository.CreateVehicle(vehicle);
 
