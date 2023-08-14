@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BillWare.Infrastructure.Migrations.BillWareSecurityDb
 {
-    [DbContext(typeof(BillWareSecurityDbContext))]
     partial class BillWareSecurityDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

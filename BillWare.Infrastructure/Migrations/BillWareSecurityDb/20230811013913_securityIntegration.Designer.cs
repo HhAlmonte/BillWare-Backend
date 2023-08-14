@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BillWare.Infrastructure.Migrations.BillWareSecurityDb
 {
-    [DbContext(typeof(BillWareSecurityDbContext))]
+    
     [Migration("20230811013913_securityIntegration")]
     partial class securityIntegration
     {
