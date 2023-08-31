@@ -7,22 +7,22 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Handler
 {
-    public class GetInventoriesPagedWithSearchQueryHandler : IRequestHandler<GetInventoriesPagedWithSearchQuery, PaginationResult<InventoryVM>>
+    public class GetICategoriesPagedWithSearchQueryHandler : IRequestHandler<GetInventoriesPagedWithSearchQuery, PaginationResult<InventoryResponse>>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public GetInventoriesPagedWithSearchQueryHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public GetICategoriesPagedWithSearchQueryHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;
         }
 
-        public async Task<PaginationResult<InventoryVM>> Handle(GetInventoriesPagedWithSearchQuery request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<InventoryResponse>> Handle(GetInventoriesPagedWithSearchQuery request, CancellationToken cancellationToken)
         {
-            var inventory = await _inventoryRepository.GetWithSearch(request.Search, request.PageIndex, request.PageSize);
+            var inventory = await _inventoryRepository.GetEntitiesPagedWithSearch(request.Search, request.PageIndex, request.PageSize);
 
-            var inventoryVM = _mapper.Map<PaginationResult<InventoryVM>>(inventory);
+            var inventoryVM = _mapper.Map<PaginationResult<InventoryResponse>>(inventory);
 
             return inventoryVM;
         }

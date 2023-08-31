@@ -5,28 +5,28 @@ using BillWare.Application.Inventory.Models;
 using BillWare.Application.Shared;
 using MediatR;
 
-namespace BillWare.Application.Inventory.Handler
+namespace BillWare.Application.Category.Handler
 {
-    public class CreateInventoryCommandHandler : IRequestHandler<CreateInventoryCommand, InventoryVM>
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateInventoryCommand, InventoryResponse>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public CreateInventoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public CreateCategoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;
         }
 
-        public async Task<InventoryVM> Handle(CreateInventoryCommand request, CancellationToken cancellationToken)
+        public async Task<InventoryResponse> Handle(CreateInventoryCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var inventoryToCreate = _mapper.Map<InventoryEntity>(request.InventoryCommandModel);
+                var inventoryToCreate = _mapper.Map<InventoryEntity>(request.Request);
 
-                var createdInventory = await _inventoryRepository.Create(inventoryToCreate);
+                var createdInventory = await _inventoryRepository.CreateEntityAsync(inventoryToCreate);
 
-                var inventoryVM = _mapper.Map<InventoryVM>(createdInventory);
+                var inventoryVM = _mapper.Map<InventoryResponse>(createdInventory);
 
                 return inventoryVM;
             }

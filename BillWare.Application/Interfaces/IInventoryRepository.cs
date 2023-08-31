@@ -5,7 +5,7 @@ namespace BillWare.Application.Interfaces
 {
     public interface IInventoryRepository : IBaseCrudRepository<InventoryEntity>
     {
-        Task<bool> UpdateQuantity(int id, int quantity);
-        Task<int> GetCurrentQuantity(int id);
+        Task<bool> UpdateInventoryQuantityAsync(int id, int quantity);
+        Task<int> GetCurrentInventoryQuantityByIdAsync(int id);
     }
 }

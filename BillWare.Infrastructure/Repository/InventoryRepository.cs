@@ -16,16 +16,17 @@ namespace BillWare.Infrastructure.Repository
             _dbSet = _context.GetDbSet<InventoryEntity>();
         }
 
-        public async Task<int> GetCurrentQuantity(int id)
+        public async Task<int> GetCurrentInventoryQuantityByIdAsync(int id)
         {
             var inventory = await _dbSet.FindAsync(id);
+
             if (inventory == null)
                 return 0;
 
             return inventory.Quantity;
         }
 
-        public async Task<bool> UpdateQuantity(int id, int quantity)
+        public async Task<bool> UpdateInventoryQuantityAsync(int id, int quantity)
         {
             var inventory = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -33,9 +34,18 @@ namespace BillWare.Infrastructure.Repository
 
             inventory.Quantity = quantity;
 
-            await Update(inventory);
+            await UpdateEntityAsync(inventory);
 
             return true;
+        }
+
+        public async new Task<PaginationResult<InventoryEntity>> GetEntitiesPaged(int pageIndex, int pageSize)
+        {
+            var entityList = await _dbSet
+                .Include(x => x.Category)
+                .GetPage(pageIndex, pageSize);
+
+            return entityList;
         }
     }
 }

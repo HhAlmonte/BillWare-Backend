@@ -14,7 +14,7 @@ namespace BillWare.Infrastructure.Repository
             _dbSet = context.GetDbSet<BillingEntity>();
         }
 
-        public async Task<BillingEntity> GetBilling(int id)
+        public async Task<BillingEntity> GetBillingById(int id)
         {
             var billing = await _dbSet
                 .Include(x => x.BillingItems)
@@ -23,7 +23,7 @@ namespace BillWare.Infrastructure.Repository
             return billing;
         }
 
-        public async new Task<PaginationResult<BillingEntity>> Get(int pageIndex, int pageSize)
+        public async new Task<PaginationResult<BillingEntity>> GetEntitiesPaged(int pageIndex, int pageSize)
         {
             var billings = await _dbSet
                 .Include(x => x.BillingItems)

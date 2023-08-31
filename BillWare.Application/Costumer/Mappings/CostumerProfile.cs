@@ -8,7 +8,10 @@ namespace BillWare.Application.Costumer.Mappings
     {
         public CostumerProfile()
         {
-            CreateMap<CostumerEntity, CostumerModel>();
+            CreateMap<PaginationResult<CostumerEntity>, PaginationResult<CostumerResponse>>().ReverseMap();
+            CreateMap<CostumerEntity, CostumerRequest>().ReverseMap();
+            CreateMap<CostumerEntity, CostumerResponse>().ReverseMap();
+            CreateMap<CostumerResponse, CostumerRequest>().ReverseMap();
         }
     }
 }

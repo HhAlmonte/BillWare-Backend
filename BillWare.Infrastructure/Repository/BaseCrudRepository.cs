@@ -17,7 +17,7 @@ namespace BillWare.Infrastructure.Repository
             _dbSet = _dbContext.GetDbSet<TEntity>();
         }
 
-        public async Task<TEntity> Create(TEntity entity)
+        public async Task<TEntity> CreateEntityAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
 
@@ -26,9 +26,9 @@ namespace BillWare.Infrastructure.Repository
             return entity;
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> DeleteEntityByIdAsync(int id)
         {
-            var entity = await Get(id);
+            var entity = await GetEntityByIdAsync(id);
 
             if (entity == null) throw new Exception("Error deleting entity.");
 
@@ -39,7 +39,7 @@ namespace BillWare.Infrastructure.Repository
             return true;
         }
 
-        public async Task<TEntity> Update(TEntity entity)
+        public async Task<TEntity> UpdateEntityAsync(TEntity entity)
         {
             _dbSet.Update(entity);
 
@@ -48,14 +48,14 @@ namespace BillWare.Infrastructure.Repository
             return entity;
         }
 
-        public async Task<PaginationResult<TEntity>> Get(int pageIndex, int pageSize)
+        public async Task<PaginationResult<TEntity>> GetEntitiesPaged(int pageIndex, int pageSize)
         {
             var entityList = await _dbSet.GetPage(pageIndex, pageSize);
 
             return entityList;
         }
 
-        public async Task<PaginationResult<TEntity>> GetWithSearch(string searchValue, int pageIndex, int pageSize)
+        public async Task<PaginationResult<TEntity>> GetEntitiesPagedWithSearch(string searchValue, int pageIndex, int pageSize)
         {
             var query = _dbSet.AsQueryable();
 
@@ -77,6 +77,15 @@ namespace BillWare.Infrastructure.Repository
             var result = await query.GetPage(pageIndex, pageSize);
 
             return result;
+        }
+
+        public async Task<TEntity> GetEntityByIdAsync(int id)
+        {
+            var entity = await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
+
+            if (entity == null) throw new Exception("Entity not found");
+
+            return entity;
         }
 
         private Expression<Func<TEntity, bool>> BuildIntegerCondition(string searchValue)
@@ -108,15 +117,6 @@ namespace BillWare.Infrastructure.Repository
             }
 
             return Expression.Lambda<Func<TEntity, bool>>(orCondition, parameter);
-        }
-
-        public async Task<TEntity> Get(int id)
-        {
-            var entity = await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
-
-            if (entity == null) throw new Exception("Entity not found");
-
-            return entity;
         }
     }
 }

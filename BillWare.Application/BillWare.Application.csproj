@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="User\Validators\" />
-    <Folder Include="Vehicle\Validators\" />
+    <Folder Include="BillingServices\" />
   </ItemGroup>
 
 </Project>

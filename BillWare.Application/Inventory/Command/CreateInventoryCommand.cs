@@ -3,13 +3,13 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Command
 {
-    public class CreateInventoryCommand : IRequest<InventoryVM>
+    public class CreateInventoryCommand : IRequest<InventoryResponse>
     {
-        public InventoryCommandModel InventoryCommandModel { get; set; }
+        public InventoryRequest Request { get; set; }
 
-        public CreateInventoryCommand(InventoryCommandModel inventoryCommandModel)
+        public CreateInventoryCommand(InventoryRequest request)
         {
-            InventoryCommandModel = inventoryCommandModel;
+            Request = request;
         }
     }
 }

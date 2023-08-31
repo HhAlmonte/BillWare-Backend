@@ -1,5 +1,5 @@
-﻿using BillWare.Application.Shared.Entities;
-using BillWare.Application.Shared.Models;
+﻿using BillWare.Application.Common.Enum;
+using BillWare.Application.Shared.Entities;
 
 namespace BillWare.Application.Billing.Entities
 {

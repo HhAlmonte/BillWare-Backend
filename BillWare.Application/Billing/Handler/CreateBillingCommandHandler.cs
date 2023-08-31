@@ -2,14 +2,13 @@
 using BillWare.Application.Billing.Command;
 using BillWare.Application.Billing.Entities;
 using BillWare.Application.Billing.Models;
+using BillWare.Application.Common.Enum;
 using BillWare.Application.Interfaces;
-using BillWare.Application.Shared;
-using BillWare.Application.Shared.Models;
 using MediatR;
 
 namespace BillWare.Application.Billing.Handler
 {
-    public class CreateBillingCommandHandler : IRequestHandler<CreateBillingCommand, BillingModel>
+    public class CreateBillingCommandHandler : IRequestHandler<CreateBillingCommand, BillingResponse>
     {
         private readonly IBillingRepository _billingRepository;
         private readonly IInventoryRepository _inventoryRepository;
@@ -22,31 +21,31 @@ namespace BillWare.Application.Billing.Handler
             _mapper = mapper;
         }
 
-        public async Task<BillingModel> Handle(CreateBillingCommand request, CancellationToken cancellationToken)
+        public async Task<BillingResponse> Handle(CreateBillingCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var billingToCreate = _mapper.Map<BillingEntity>(request.Billing);
+                var billingToCreate = _mapper.Map<BillingEntity>(request.Request);
 
                 billingToCreate.TotalPrice = billingToCreate.BillingItems.Sum(x => x.Price * x.Quantity);
 
-                var billingCreated = await _billingRepository.Create(billingToCreate);
+                var billingCreated = await _billingRepository.CreateEntityAsync(billingToCreate);
 
                 if (billingCreated == null) throw new CrudOperationException("Hubo un error procesando la factura.");
 
-                if(billingCreated.BillingStatus != BillingStatus.Cancelled)
+                if (billingCreated.BillingStatus != BillingStatus.Cancelled)
                 {
                     foreach (var product in billingCreated.BillingItems)
                     {
-                        var currentQuantity = await _inventoryRepository.GetCurrentQuantity(product.Code);
+                        var currentQuantity = await _inventoryRepository.GetCurrentInventoryQuantityByIdAsync(product.Code);
 
                         var newQuantity = currentQuantity - product.Quantity;
 
-                        await _inventoryRepository.UpdateQuantity(product.Code, newQuantity);
+                        await _inventoryRepository.UpdateInventoryQuantityAsync(product.Code, newQuantity);
                     }
                 }
 
-                return _mapper.Map<BillingModel>(billingCreated);
+                return _mapper.Map<BillingResponse>(billingCreated);
             }
             catch (CrudOperationException ex)
             {

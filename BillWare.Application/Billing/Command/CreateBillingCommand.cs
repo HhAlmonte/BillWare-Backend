@@ -3,13 +3,13 @@ using MediatR;
 
 namespace BillWare.Application.Billing.Command
 {
-    public class CreateBillingCommand : IRequest<BillingModel>
+    public class CreateBillingCommand : IRequest<BillingResponse>
     {
-        public BillingModel Billing { get; set; }
+        public BillingRequest Request { get; set; }
 
-        public CreateBillingCommand(BillingModel billing)
+        public CreateBillingCommand(BillingRequest request)
         {
-            Billing = billing;
+            Request = request;
         }
     }
 }

@@ -8,9 +8,11 @@ namespace BillWare.Application.Billing.Mappings
     {
         public BillingProfile()
         {
-            CreateMap<PaginationResult<BillingEntity>, PaginationResult<BillingModel>>().ReverseMap();
-            CreateMap<BillingEntity, BillingModel>().ReverseMap();
-            CreateMap<BillingItemEntity, BillingItemModel>().ReverseMap();
+            CreateMap<PaginationResult<BillingEntity>, PaginationResult<BillingResponse>>().ReverseMap();
+
+            CreateMap<BillingEntity, BillingResponse>().ReverseMap();
+
+            CreateMap<BillingItemEntity, BillingItemResponse>().ReverseMap();
         }
     }
 }

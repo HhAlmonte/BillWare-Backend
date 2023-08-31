@@ -24,11 +24,11 @@ namespace BillWare.API.Controllers
         [HttpPost("CreateBilling")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateBilling([FromBody] BillingModel model)
+        public async Task<IActionResult> CreateBilling([FromBody] BillingRequest request)
         {
             try
             {
-                var billingCreated = await mediator.Send(new CreateBillingCommand(model));
+                var billingCreated = await mediator.Send(new CreateBillingCommand(request));
 
                 return Ok(billingCreated);
             }
@@ -62,7 +62,7 @@ namespace BillWare.API.Controllers
         {
             try
             {
-                var billings = await mediator.Send(new GetBillingsWithSearchQuery(search, pageIndex, pageSize));
+                var billings = await mediator.Send(new GetBillingsPagedWithSearchQuery(search, pageIndex, pageSize));
 
                 return Ok(billings);
             }
@@ -92,11 +92,11 @@ namespace BillWare.API.Controllers
         [HttpPut("UpdateBilling")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateBilling([FromBody] BillingModel model)
+        public async Task<IActionResult> UpdateBilling([FromBody] BillingRequest request)
         {
             try
             {
-                await mediator.Send(new UpdateBillingCommand(model));
+                await mediator.Send(new UpdateBillingCommand(request));
 
                 return Ok();
             }

@@ -7,7 +7,7 @@ using MediatR;
 
 namespace BillWare.Application.Costumer.Handler
 {
-    public class GetCostumerByIdQueryHandler : IRequestHandler<GetCostumerByIdQuery, CostumerModel>
+    public class GetCostumerByIdQueryHandler : IRequestHandler<GetCostumerByIdQuery, CostumerResponse>
     {
         private readonly IBaseCrudRepository<CostumerEntity> _costumerRepository;
         private readonly IMapper _mapper;
@@ -18,14 +18,14 @@ namespace BillWare.Application.Costumer.Handler
             _mapper = mapper;
         }
 
-        public async Task<CostumerModel> Handle(GetCostumerByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CostumerResponse> Handle(GetCostumerByIdQuery request, CancellationToken cancellationToken)
         {
-            var costumer = await _costumerRepository.Get(request.Id);
+            var costumer = await _costumerRepository.GetEntityByIdAsync(request.Id);
 
             if (costumer == null)
                 throw new CrudOperationException("Costumer not found");
 
-            return _mapper.Map<CostumerModel>(costumer);
+            return _mapper.Map<CostumerResponse>(costumer);
         }
     }
 }

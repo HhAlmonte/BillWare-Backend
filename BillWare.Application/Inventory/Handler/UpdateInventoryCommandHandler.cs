@@ -7,24 +7,24 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Handler
 {
-    public class UpdateInventoryCommandHandler : IRequestHandler<UpdateInventoryCommand, InventoryVM>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateInventoryCommand, InventoryResponse>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public UpdateInventoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public UpdateCategoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;
         }
 
-        public async Task<InventoryVM> Handle(UpdateInventoryCommand request, CancellationToken cancellationToken)
+        public async Task<InventoryResponse> Handle(UpdateInventoryCommand request, CancellationToken cancellationToken)
         {
-            var inventoryToUpdate = _mapper.Map<InventoryEntity>(request.InventoryCommandModel);
+            var inventoryToUpdate = _mapper.Map<InventoryEntity>(request.Request);
 
-            var updatedInventory = await _inventoryRepository.Update(inventoryToUpdate);
+            var updatedInventory = await _inventoryRepository.UpdateEntityAsync(inventoryToUpdate);
 
-            var inventoryVM = _mapper.Map<InventoryVM>(updatedInventory);
+            var inventoryVM = _mapper.Map<InventoryResponse>(updatedInventory);
 
             return inventoryVM;
         }

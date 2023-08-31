@@ -6,7 +6,7 @@ using MediatR;
 
 namespace BillWare.Application.Billing.Handler
 {
-    public class GetBillingsPagedQueryHandler : IRequestHandler<GetBillingsPagedQuery, PaginationResult<BillingModel>>
+    public class GetBillingsPagedQueryHandler : IRequestHandler<GetBillingsPagedQuery, PaginationResult<BillingResponse>>
     {
         private readonly IBillingRepository _billingRepository;
         private readonly IMapper _mapper;
@@ -17,11 +17,11 @@ namespace BillWare.Application.Billing.Handler
             _mapper = mapper;
         }
 
-        public async Task<PaginationResult<BillingModel>> Handle(GetBillingsPagedQuery request, CancellationToken cancellationToken)
+        public async Task<PaginationResult<BillingResponse>> Handle(GetBillingsPagedQuery request, CancellationToken cancellationToken)
         {
-            var billings = await _billingRepository.Get(request.PageIndex, request.PageSize);
+            var billings = await _billingRepository.GetEntitiesPaged(request.PageIndex, request.PageSize);
 
-            var billingsMapped = _mapper.Map<PaginationResult<BillingModel>>(billings);
+            var billingsMapped = _mapper.Map<PaginationResult<BillingResponse>>(billings);
 
             return billingsMapped;
         }

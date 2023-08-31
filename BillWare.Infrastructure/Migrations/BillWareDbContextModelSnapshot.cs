@@ -129,6 +129,39 @@ namespace BillWare.Infrastructure.Migrations
                     b.ToTable("BillingItems");
                 });
 
+            modelBuilder.Entity("BillWare.Application.Category.Entities.CategoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("BillWare.Application.Costumer.Entities.CostumerEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -175,9 +208,8 @@ namespace BillWare.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -211,90 +243,9 @@ namespace BillWare.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Inventories");
-                });
-
-            modelBuilder.Entity("BillWare.Application.Vehicle.Entities.VehicleEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Comments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Plate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("VehicleEntranceEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Year")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VehicleEntranceEntityId");
-
-                    b.ToTable("Vehicles");
-                });
-
-            modelBuilder.Entity("BillWare.Application.VehiculoEntrance.Entities.VehicleEntranceEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CostumerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CostumerId");
-
-                    b.ToTable("VehicleEntrances");
                 });
 
             modelBuilder.Entity("BillWare.Application.Billing.Entities.BillingItemEntity", b =>
@@ -308,34 +259,20 @@ namespace BillWare.Infrastructure.Migrations
                     b.Navigation("Billing");
                 });
 
-            modelBuilder.Entity("BillWare.Application.Vehicle.Entities.VehicleEntity", b =>
+            modelBuilder.Entity("BillWare.Application.Inventory.Entities.InventoryEntity", b =>
                 {
-                    b.HasOne("BillWare.Application.VehiculoEntrance.Entities.VehicleEntranceEntity", null)
-                        .WithMany("Vehicles")
-                        .HasForeignKey("VehicleEntranceEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BillWare.Application.VehiculoEntrance.Entities.VehicleEntranceEntity", b =>
-                {
-                    b.HasOne("BillWare.Application.Costumer.Entities.CostumerEntity", "Costumer")
+                    b.HasOne("BillWare.Application.Category.Entities.CategoryEntity", "Category")
                         .WithMany()
-                        .HasForeignKey("CostumerId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Costumer");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BillWare.Application.Billing.Entities.BillingEntity", b =>
                 {
                     b.Navigation("BillingItems");
-                });
-
-            modelBuilder.Entity("BillWare.Application.VehiculoEntrance.Entities.VehicleEntranceEntity", b =>
-                {
-                    b.Navigation("Vehicles");
                 });
 #pragma warning restore 612, 618
         }

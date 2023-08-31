@@ -5,7 +5,7 @@ namespace BillWare.Application.Interfaces
 {
     public interface IBillingRepository : IBaseCrudRepository<BillingEntity>
     {
-        Task<BillingEntity> GetBilling(int id);
+        Task<BillingEntity> GetBillingById(int id);
 
         Task<int> GetInvoiceNumber();
     }

@@ -17,19 +17,19 @@ namespace BillWare.Application.Billing.Handler
 
         public async Task<bool> Handle(DeleteBillingCommand request, CancellationToken cancellationToken)
         {
-            var billing = await _billingRepository.GetBilling(request.Id);
+            var billing = await _billingRepository.GetBillingById(request.Id);
 
             if (billing != null)
             {
                 foreach (var item in billing.BillingItems) 
                 {
-                    var inventory = await _inventoryRepository.GetCurrentQuantity(item.Code);
+                    var inventory = await _inventoryRepository.GetCurrentInventoryQuantityByIdAsync(item.Code);
                     var newQuantity = inventory += item.Quantity;
-                    await _inventoryRepository.UpdateQuantity(item.Code ,newQuantity);
+                    await _inventoryRepository.UpdateInventoryQuantityAsync(item.Code ,newQuantity);
                 }
             }
 
-            var billingDeleted = await _billingRepository.Delete(request.Id);
+            var billingDeleted = await _billingRepository.DeleteEntityByIdAsync(request.Id);
 
             return billingDeleted;
         }

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Query
 {
-    public class GetInventoriesPagedWithSearchQuery : IRequest<PaginationResult<InventoryVM>>
+    public class GetInventoriesPagedWithSearchQuery : IRequest<PaginationResult<InventoryResponse>>
     {
         public string Search { get; set; }
         public int PageIndex { get; set; }

@@ -8,7 +8,7 @@ using MediatR;
 
 namespace BillWare.Application.Billing.Handler
 {
-    public class UpdateBillingCommandHandler : IRequestHandler<UpdateBillingCommand, BillingModel>
+    public class UpdateBillingCommandHandler : IRequestHandler<UpdateBillingCommand, BillingResponse>
     {
         private readonly IBillingRepository _billingRepository;
         private readonly IBaseCrudRepository<BillingItemEntity> _billingItemRepository;
@@ -26,17 +26,17 @@ namespace BillWare.Application.Billing.Handler
             _mapper = mapper;
         }
 
-        public async Task<BillingModel> Handle(UpdateBillingCommand request, CancellationToken cancellationToken)
+        public async Task<BillingResponse> Handle(UpdateBillingCommand request, CancellationToken cancellationToken)
         {
-            var billing = _mapper.Map<BillingEntity>(request.Billing);
+            var billing = _mapper.Map<BillingEntity>(request.Request);
 
             billing.TotalPrice = billing.BillingItems.Sum(x => x.Price * x.Quantity);
 
-            var updatedBilling = await _billingRepository.Update(billing);
+            var updatedBilling = await _billingRepository.UpdateEntityAsync(billing);
 
             foreach (var item in billing.BillingItems)
             {
-                var getCurrentItemQuantityInvoice = await _billingItemRepository.Get(item.Id);
+                var getCurrentItemQuantityInvoice = await _billingItemRepository.GetEntityByIdAsync(item.Id);
 
                 if (item.Quantity != getCurrentItemQuantityInvoice.Quantity)
                 {
@@ -44,10 +44,10 @@ namespace BillWare.Application.Billing.Handler
 
                     if (getCurrentItemQuantityInvoice.Quantity < item.Quantity)
                     {
-                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.Code);
+                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentInventoryQuantityByIdAsync(item.Code);
                         if (currentInventoryQuantity >= quantityToAddOrRemove)
                         {
-                            await _inventoryRepository.UpdateQuantity(item.Code, currentInventoryQuantity - quantityToAddOrRemove);
+                            await _inventoryRepository.UpdateInventoryQuantityAsync(item.Code, currentInventoryQuantity - quantityToAddOrRemove);
                         }
                         else
                         {
@@ -56,13 +56,13 @@ namespace BillWare.Application.Billing.Handler
                     }
                     else
                     {
-                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentQuantity(item.Code);
-                        await _inventoryRepository.UpdateQuantity(item.Code, currentInventoryQuantity + quantityToAddOrRemove);
+                        var currentInventoryQuantity = await _inventoryRepository.GetCurrentInventoryQuantityByIdAsync(item.Code);
+                        await _inventoryRepository.UpdateInventoryQuantityAsync(item.Code, currentInventoryQuantity + quantityToAddOrRemove);
                     }
                 }
             }
 
-            return _mapper.Map<BillingModel>(updatedBilling);
+            return _mapper.Map<BillingResponse>(updatedBilling);
         }
 
     }

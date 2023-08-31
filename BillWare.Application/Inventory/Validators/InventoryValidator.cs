@@ -1,9 +1,10 @@
 ﻿using BillWare.Application.Inventory.Entities;
+using BillWare.Application.Inventory.Models;
 using FluentValidation;
 
 namespace BillWare.Application.Inventory.Validators
 {
-    public class InventoryValidator : AbstractValidator<InventoryEntity>
+    public class InventoryValidator : AbstractValidator<InventoryRequest>
     {
         public InventoryValidator()
         {
@@ -11,7 +12,7 @@ namespace BillWare.Application.Inventory.Validators
             RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required");
             RuleFor(x => x.Model).NotEmpty().WithMessage("Model is required");
             RuleFor(x => x.Price).NotEmpty().WithMessage("Price is required");
-            RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
+            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("Category is required");
         }
     }
 }

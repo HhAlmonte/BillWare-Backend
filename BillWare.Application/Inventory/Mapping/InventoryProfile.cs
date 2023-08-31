@@ -8,9 +8,14 @@ namespace BillWare.Application.Inventory.Mapping
     {
         public InventoryProfile()
         {
-            CreateMap<InventoryCommandModel, InventoryEntity>().ReverseMap();
-            CreateMap<InventoryEntity, InventoryVM>().ReverseMap();
-            CreateMap<PaginationResult<InventoryEntity>, PaginationResult<InventoryVM>>().ReverseMap();
+            CreateMap<InventoryRequest, InventoryEntity>().ReverseMap();
+
+            CreateMap<InventoryEntity, InventoryResponse>()
+                .ForMember(dest => dest.Category, op => op.MapFrom(source => source.Category.Name))
+                .ReverseMap();
+
+            CreateMap<PaginationResult<InventoryEntity>, PaginationResult<InventoryResponse>>()
+                .ReverseMap();
         }
     }
 }

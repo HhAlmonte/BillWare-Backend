@@ -3,7 +3,7 @@ using MediatR;
 
 namespace BillWare.Application.Billing.Query
 {
-    public class GetBillingsPagedQuery : IRequest<PaginationResult<BillingModel>>
+    public class GetBillingsPagedQuery : IRequest<PaginationResult<BillingResponse>>
     {
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
