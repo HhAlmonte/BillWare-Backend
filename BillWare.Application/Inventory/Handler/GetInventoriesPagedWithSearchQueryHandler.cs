@@ -7,12 +7,12 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Handler
 {
-    public class GetICategoriesPagedWithSearchQueryHandler : IRequestHandler<GetInventoriesPagedWithSearchQuery, PaginationResult<InventoryResponse>>
+    public class GetInventoriesPagedWithSearchQueryHandler : IRequestHandler<GetInventoriesPagedWithSearchQuery, PaginationResult<InventoryResponse>>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public GetICategoriesPagedWithSearchQueryHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public GetInventoriesPagedWithSearchQueryHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;

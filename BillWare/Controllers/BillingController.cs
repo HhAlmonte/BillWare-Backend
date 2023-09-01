@@ -1,6 +1,8 @@
-﻿using BillWare.Application.Billing.Command;
+﻿using AutoMapper;
+using BillWare.Application.Billing.Command;
 using BillWare.Application.Billing.Models;
 using BillWare.Application.Billing.Query;
+using BillWare.Application.Category.Models;
 using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +15,11 @@ namespace BillWare.API.Controllers
     {
         private readonly IMediator mediator;
         private readonly IBillingRepository _billingRepository;
+        private readonly IMapper _mapper;
 
-        public BillingController(IMediator mediator, IBillingRepository billingRepository)
+        public BillingController(IMediator mediator, IBillingRepository billingRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _billingRepository = billingRepository;
             this.mediator = mediator;
         }
@@ -48,6 +52,25 @@ namespace BillWare.API.Controllers
                 var billings = await mediator.Send(new GetBillingsPagedQuery(pageIndex, pageSize));
 
                 return Ok(billings);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetBillingsPagedWithParams")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsPagedWithParams([FromQuery]ParamsRequest @params)
+        {
+            try
+            {
+                var billings = await _billingRepository.GetBillingsPagedWithParams(@params);
+
+                var billingsResponse = _mapper.Map<PaginationResult<BillingResponse>>(billings);
+
+                return Ok(billingsResponse);
             }
             catch (Exception ex)
             {

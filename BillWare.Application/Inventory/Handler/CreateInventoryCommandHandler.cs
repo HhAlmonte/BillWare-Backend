@@ -5,14 +5,14 @@ using BillWare.Application.Inventory.Models;
 using BillWare.Application.Shared;
 using MediatR;
 
-namespace BillWare.Application.Category.Handler
+namespace BillWare.Application.Inventory.Handler
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateInventoryCommand, InventoryResponse>
+    public class CreateInventoryCommandHandler : IRequestHandler<CreateInventoryCommand, InventoryResponse>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public CreateCategoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public CreateInventoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;

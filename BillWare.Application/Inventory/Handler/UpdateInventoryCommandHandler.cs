@@ -7,12 +7,12 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Handler
 {
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateInventoryCommand, InventoryResponse>
+    public class UpdateInventoryCommandHandler : IRequestHandler<UpdateInventoryCommand, InventoryResponse>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public UpdateCategoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public UpdateInventoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;

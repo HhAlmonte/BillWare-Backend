@@ -5,11 +5,11 @@ using MediatR;
 
 namespace BillWare.Application.Inventory.Handler
 {
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteInventoryCommand, bool>
+    public class DeleteInventoryCommandHandler : IRequestHandler<DeleteInventoryCommand, bool>
     {
         private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
 
-        public DeleteCategoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository)
+        public DeleteInventoryCommandHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository)
         {
             _inventoryRepository = inventoryRepository;
         }

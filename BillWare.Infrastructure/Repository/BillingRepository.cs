@@ -1,4 +1,5 @@
 ﻿using BillWare.Application.Billing.Entities;
+using BillWare.Application.Billing.Models;
 using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,23 @@ namespace BillWare.Infrastructure.Repository
         public BillingRepository(IBillWareDbContext context) : base(context)
         {
             _dbSet = context.GetDbSet<BillingEntity>();
+        }
+
+        public async Task<PaginationResult<BillingEntity>> GetBillingsPagedWithParams(ParamsRequest @params)
+        {
+            var billings = _dbSet
+                .Include(x => x.BillingItems)
+                .AsQueryable();
+
+            if(@params.InitialDate != null && @params.FinalDate != null)
+            {
+                billings = billings.Where(x => x.CreatedAt >= @params.InitialDate && x.CreatedAt <= @params.FinalDate);
+            }
+
+            var billingsReponse = await billings
+                .GetPage(@params.PageIndex, @params.PageSize);
+
+            return billingsReponse;
         }
 
         public async Task<BillingEntity> GetBillingById(int id)

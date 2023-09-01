@@ -19,15 +19,16 @@ namespace BillWare.Infrastructure.Repository
         {
             DateTime initialDate = DateTime.Today.AddMonths(-12);
 
-            var salesPerDay = await _dbSet.Where(x => x.CreatedAt >= initialDate)
-                    .GroupBy(x => new { x.CreatedAt.Year, x.CreatedAt.Month, x.CreatedAt.Day })
-                    .Select(group => new StatisticsResponse
-                    {
-                        SaleDate = $"{group.Key.Year}/{group.Key.Month:00}/{group.Key.Day:00}",
-                        Amount = group.Sum(v => v.TotalPriceWithTax)
-                    }).ToListAsync();
+            var salesPerMonth = await _dbSet
+                .Where(x => x.CreatedAt >= initialDate)
+                .GroupBy(x => new { x.CreatedAt.Year, x.CreatedAt.Month })
+                .Select(group => new StatisticsResponse
+                {
+                    SaleDate = $"{group.Key.Year}/{group.Key.Month:00}/01",
+                    Amount = group.Sum(v => v.TotalPriceWithTax)
+                }).ToListAsync();
 
-            return salesPerDay;
+            return salesPerMonth;
         }
 
         public async Task<List<StatisticsResponse>> GetSalesLast30Days()
@@ -38,7 +39,7 @@ namespace BillWare.Infrastructure.Repository
                     .GroupBy(x => x.CreatedAt.Date)
                     .Select(group => new StatisticsResponse
                     {
-                        SaleDate = $"Día {group.Key.Day}",
+                        SaleDate = group.Key.ToString("dd/MM/yyyy"),
                         Amount = group.Sum(v => v.TotalPriceWithTax)
                     }).ToListAsync();
 

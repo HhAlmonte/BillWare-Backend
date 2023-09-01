@@ -2,6 +2,8 @@
 {
     public class BillingRequest
     {
+        public int Id { get; set; }
+
         // Costumer
         public string FullName { get; set; }
         public string? Phone { get; set; }
@@ -18,5 +20,7 @@
 
         public int BillingStatus { get; set; }
         public List<BillingItemResponse> BillingItems { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }
