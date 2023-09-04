@@ -5,9 +5,11 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BillWare.API", "BillWare\BillWare.API.csproj", "{5A88DDFB-DD33-4B83-8DA0-751747C2CD8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillWare.Application", "BillWare.Application\BillWare.Application.csproj", "{5238EDB0-14EB-4145-A7C9-0FCF1866A6DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BillWare.Application", "BillWare.Application\BillWare.Application.csproj", "{5238EDB0-14EB-4145-A7C9-0FCF1866A6DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillWare.Infrastructure", "BillWare.Infrastructure\BillWare.Infrastructure.csproj", "{E14BCC5D-7E5A-4DC7-9E7E-933F31DBD838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BillWare.Infrastructure", "BillWare.Infrastructure\BillWare.Infrastructure.csproj", "{E14BCC5D-7E5A-4DC7-9E7E-933F31DBD838}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillWare.Infrastructure.Security", "BillWare.Security\BillWare.Infrastructure.Security.csproj", "{307881D5-4492-468A-AECB-678734E21388}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{E14BCC5D-7E5A-4DC7-9E7E-933F31DBD838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E14BCC5D-7E5A-4DC7-9E7E-933F31DBD838}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E14BCC5D-7E5A-4DC7-9E7E-933F31DBD838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{307881D5-4492-468A-AECB-678734E21388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{307881D5-4492-468A-AECB-678734E21388}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{307881D5-4492-468A-AECB-678734E21388}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{307881D5-4492-468A-AECB-678734E21388}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

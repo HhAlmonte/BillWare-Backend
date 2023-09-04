@@ -2,8 +2,10 @@
 using BillWare.Application.Category.Models;
 using BillWare.Application.Category.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace BillWare.API.Controllers
 {
@@ -20,6 +22,7 @@ namespace BillWare.API.Controllers
 
 
         [HttpGet("GetCategoriesPagedWithSearch")]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<CategoryResponse>>> GetCategoriesPagedWithSearch(string search, int pageIndex, int pageSize)
         {
             var categories = await _mediator.Send(new GetCategoriesPagedWithSearchQuery(pageIndex, pageSize, search));
@@ -28,6 +31,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetCategoriesPaged")]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<CategoryResponse>>> GetCategoriesPaged(int pageIndex, int pageSize)
         {
             var categories = await _mediator.Send(new GetCategoriesPagedQuery(pageIndex, pageSize));
@@ -36,6 +40,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPost("CreateCategory")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CategoryResponse>> CreateCategory(CategoryRequest request)
         {
             try
@@ -59,6 +64,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPut("UpdateCategory")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CategoryResponse>> UpdateCategory(CategoryRequest request)
         {
             var updatedCategory = await _mediator.Send(new UpdateCategoryCommand(request));
@@ -67,6 +73,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpDelete("DeleteCategory/{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> DeleteCategory(int id)
         {
             try

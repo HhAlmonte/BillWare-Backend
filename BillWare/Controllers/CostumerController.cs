@@ -1,12 +1,11 @@
 ﻿using BillWare.Application.Costumer.Command;
 using BillWare.Application.Costumer.Models;
 using BillWare.Application.Costumer.Query;
-using BillWare.Application.Inventory.Command;
-using BillWare.Application.Inventory.Models;
-using BillWare.Application.Inventory.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace BillWare.API.Controllers
 {
@@ -22,6 +21,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetCostumerById")]
+        [Authorize]
         public async Task<IActionResult> GetCostumerById(int id)
         {
             var costumer = await _mediator.Send(new GetCostumerByIdQuery(id));
@@ -31,6 +31,7 @@ namespace BillWare.API.Controllers
 
 
         [HttpGet("GetCostumersPagedWithSearch")]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<CostumerResponse>>> GetCostumersPagedWithSearch(string search, int pageIndex, int pageSize)
         {
             var costumers = await _mediator.Send(new GetCostumersPagedWithSearchQuery(pageIndex, pageSize, search));
@@ -39,6 +40,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetCostumersPaged")]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<CostumerResponse>>> GetCostumersPaged(int pageIndex, int pageSize)
         {
             var costumers = await _mediator.Send(new GetCostumersPagedQuery(pageIndex, pageSize));
@@ -47,6 +49,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPost("CreateCostumer")]
+        [Authorize]
         public async Task<ActionResult<CostumerResponse>> CreateCostumer(CostumerRequest request)
         {
             try
@@ -70,6 +73,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPut("UpdateCostumer")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CostumerResponse>> UpdateCostumer(CostumerRequest request)
         {
             var updatedCostumer = await _mediator.Send(new UpdateCostumerCommand(request));
@@ -78,6 +82,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpDelete("DeleteCostumer/{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> DeleteCostumer(int id)
         {
             try

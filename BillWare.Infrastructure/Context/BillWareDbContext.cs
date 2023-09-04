@@ -17,7 +17,7 @@ namespace BillWare.Infrastructure.Context
 
     public class BillWareDbContext : DbContext, IBillWareDbContext
     {
-        public BillWareDbContext(DbContextOptions options) : base(options)
+        public BillWareDbContext(DbContextOptions<BillWareDbContext> options) : base(options)
         {
         }
 

@@ -2,9 +2,9 @@
 using BillWare.Application.Billing.Command;
 using BillWare.Application.Billing.Models;
 using BillWare.Application.Billing.Query;
-using BillWare.Application.Category.Models;
 using BillWare.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillWare.API.Controllers
@@ -28,6 +28,7 @@ namespace BillWare.API.Controllers
         [HttpPost("CreateBilling")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> CreateBilling([FromBody] BillingRequest request)
         {
             try
@@ -45,6 +46,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetBillingsPaged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> GetBillings(int pageIndex, int pageSize)
         {
             try
@@ -62,7 +64,8 @@ namespace BillWare.API.Controllers
         [HttpGet("GetBillingsPagedWithParams")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsPagedWithParams([FromQuery]ParamsRequest @params)
+        [Authorize]
+        public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsPagedWithParams([FromQuery] ParamsRequest @params)
         {
             try
             {
@@ -81,6 +84,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetBillingsWithSearchPaged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> GetBillingsWithSearch(string search, int pageIndex, int pageSize)
         {
             try
@@ -98,6 +102,7 @@ namespace BillWare.API.Controllers
         [HttpDelete("DeleteBilling")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteBilling(int id)
         {
             try
@@ -115,6 +120,7 @@ namespace BillWare.API.Controllers
         [HttpPut("UpdateBilling")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> UpdateBilling([FromBody] BillingRequest request)
         {
             try
@@ -132,6 +138,7 @@ namespace BillWare.API.Controllers
         [HttpGet("GetInvoiceNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> GetInvoiceNumber()
         {
             try

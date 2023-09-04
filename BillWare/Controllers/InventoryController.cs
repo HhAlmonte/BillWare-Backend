@@ -2,7 +2,7 @@
 using BillWare.Application.Inventory.Models;
 using BillWare.Application.Inventory.Query;
 using MediatR;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -20,6 +20,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetInventoryWithSearch")]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<InventoryResponse>>> GetInventoryWithSearch(string search, int pageIndex, int pageSize)
         {
             var inventory = await _mediator.Send(new GetInventoriesPagedWithSearchQuery(search, pageIndex, pageSize));
@@ -28,6 +29,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetInventoriesPaged")]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<InventoryResponse>>> GetInventoriesPaged(int pageIndex, int pageSize)
         {
             var inventories = await _mediator.Send(new GetInventoriesPagedQuery(pageIndex, pageSize));
@@ -36,6 +38,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPost("CreateInventory")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<InventoryResponse>> CreateInventory(InventoryRequest inventory)
         {
             try
@@ -59,6 +62,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPut("UpdateInventory")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<InventoryResponse>> UpdateInventory(InventoryRequest inventory)
         {
             var updatedInventory = await _mediator.Send(new UpdateInventoryCommand(inventory));
@@ -67,6 +71,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpDelete("DeleteInventory/{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> DeleteInventory(int id)
         {
             try

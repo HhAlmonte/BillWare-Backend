@@ -1,5 +1,7 @@
 ﻿using BillWare.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace BillWare.API.Controllers
 {
@@ -14,6 +16,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetSalesLast30Days")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> GetSalesLast30Days()
         {
             var sales = await _dashboardRepository.GetSalesLast30Days();
@@ -22,6 +25,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetSalesLast12Month")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> GetSalesLast12Month()
         {
             var sales = await _dashboardRepository.GetSalesLast12Month();
