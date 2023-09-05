@@ -1,4 +1,5 @@
-﻿using BillWare.Application.Interfaces;
+﻿using BillWare.Application.Dashboard.Models;
+using BillWare.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -17,20 +18,54 @@ namespace BillWare.API.Controllers
 
         [HttpGet("GetSalesLast30Days")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetSalesLast30Days()
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<StatisticsResponse>> GetSalesLast30Days()
         {
-            var sales = await _dashboardRepository.GetSalesLast30Days();
+            if (!User.IsInRole("Administrator"))
+            {
+                return Unauthorized("Este usuario no esté autorizado para acción");
+            }
 
-            return Ok(sales);
+            try
+            {
+                var content = await _dashboardRepository.GetSalesLast30Days();
+
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("GetSalesLast12Month")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetSalesLast12Month()
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<StatisticsResponse>> GetSalesLast12Month()
         {
-            var sales = await _dashboardRepository.GetSalesLast12Month();
+            if (!User.IsInRole("Administrator"))
+            {
+                return Unauthorized("Este usuario no esté autorizado para acción");
+            }
 
-            return Ok(sales);
+            try
+            {
+                var content = await _dashboardRepository.GetSalesLast12Month();
+
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }

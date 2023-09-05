@@ -6,6 +6,7 @@ using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace BillWare.API.Controllers
 {
@@ -25,131 +26,152 @@ namespace BillWare.API.Controllers
         }
 
 
+        [Authorize] 
         [HttpPost("CreateBilling")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
-        public async Task<IActionResult> CreateBilling([FromBody] BillingRequest request)
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<BillingResponse>> CreateBilling([FromBody] BillingRequest request)
         {
             try
             {
-                var billingCreated = await mediator.Send(new CreateBillingCommand(request));
+                var content = await mediator.Send(new CreateBillingCommand(request));
 
-                return Ok(billingCreated);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
+        [Authorize]
         [HttpGet("GetBillingsPaged")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
-        public async Task<IActionResult> GetBillings(int pageIndex, int pageSize)
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillings(int pageIndex, int pageSize)
         {
             try
             {
-                var billings = await mediator.Send(new GetBillingsPagedQuery(pageIndex, pageSize));
+                var content = await mediator.Send(new GetBillingsPagedQuery(pageIndex, pageSize));
 
-                return Ok(billings);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
-        [HttpGet("GetBillingsPagedWithParams")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
+        [HttpGet("GetBillingsPagedWithParams")]
+        [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsPagedWithParams([FromQuery] ParamsRequest @params)
         {
             try
             {
-                var billings = await _billingRepository.GetBillingsPagedWithParams(@params);
+                var content = await _billingRepository.GetBillingsPagedWithParams(@params);
 
-                var billingsResponse = _mapper.Map<PaginationResult<BillingResponse>>(billings);
+                var contentMapped = _mapper.Map<PaginationResult<BillingResponse>>(content);
 
-                return Ok(billingsResponse);
+                return Ok(contentMapped);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
+        [Authorize]
         [HttpGet("GetBillingsWithSearchPaged")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
-        public async Task<IActionResult> GetBillingsWithSearch(string search, int pageIndex, int pageSize)
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsWithSearch(string search, int pageIndex, int pageSize)
         {
             try
             {
-                var billings = await mediator.Send(new GetBillingsPagedWithSearchQuery(search, pageIndex, pageSize));
+                var content = await mediator.Send(new GetBillingsPagedWithSearchQuery(search, pageIndex, pageSize));
 
-                return Ok(billings);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
-        [HttpDelete("DeleteBilling")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteBilling(int id)
+        [HttpDelete("DeleteBilling")]
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<bool>> DeleteBilling(int id)
         {
             try
             {
-                await mediator.Send(new DeleteBillingCommand(id));
+                var response = await mediator.Send(new DeleteBillingCommand(id));
 
-                return Ok();
+                return Ok(response);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
+        [Authorize]
         [HttpPut("UpdateBilling")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
-        public async Task<IActionResult> UpdateBilling([FromBody] BillingRequest request)
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<BillingResponse>> UpdateBilling([FromBody] BillingRequest request)
         {
             try
             {
-                await mediator.Send(new UpdateBillingCommand(request));
+                var content = await mediator.Send(new UpdateBillingCommand(request));
 
-                return Ok();
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
-        [HttpGet("GetInvoiceNumber")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
-        public async Task<IActionResult> GetInvoiceNumber()
+        [HttpGet("GetInvoiceNumber")]
+        [ProducesResponseType(typeof(DataTable), 200)]
+        public async Task<ActionResult<int>> GetInvoiceNumber()
         {
             try
             {
-                var invoiceNumber = await _billingRepository.GetInvoiceNumber();
+                var content = await _billingRepository.GetInvoiceNumber();
 
-                return Ok(invoiceNumber);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

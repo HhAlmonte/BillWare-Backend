@@ -19,59 +19,119 @@ namespace BillWare.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("CreateBillingService")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
+        [HttpPost("CreateBillingService")]
+        [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingServiceResponse>> CreateBillingService([FromBody] BillingServiceRequest request)
         {
-            var result = await _mediator.Send(new CreateBillingServiceCommand(request));
+            try
+            {
+                var content = await _mediator.Send(new CreateBillingServiceCommand(request));
 
-            return Ok(result);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-        [HttpGet("GetBillingsServicesPaged")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
+        [HttpGet("GetBillingsServicesPaged")]
+        [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingServiceResponse>> GetBillingsServicesPaged(int pageIndex, int pageSize)
         {
-            var result = await _mediator.Send(new GetBillingsServicePagedQuery(pageIndex, pageSize));
+            try
+            {
+                var content = await _mediator.Send(new GetBillingsServicePagedQuery(pageIndex, pageSize));
 
-            return Ok(result);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-        [HttpGet("GetBillingsServicesPagedWithSearch")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
+        [HttpGet("GetBillingsServicesPagedWithSearch")]
+        [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingServiceResponse>> GetBillingsServicesPagedWithSearch(int pageIndex, int pageSize, string search)
         {
-            var result = await _mediator.Send(new GetBillingsServicesPagedWithSearchQuery(pageIndex, pageSize, search));
+            try
+            {
+                var content = await _mediator.Send(new GetBillingsServicesPagedWithSearchQuery(pageIndex, pageSize, search));
 
-            return Ok(result);
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-        [HttpPut("UpdateBillingService")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
+        [HttpPut("UpdateBillingService")]
+        [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingServiceResponse>> UpdateBillingService([FromBody] BillingServiceRequest request)
         {
-            var result = await _mediator.Send(new UpdateBillingServiceCommand(request));
+            if (!User.IsInRole("Administrator"))
+            {
+                return Unauthorized("Este usuario no esté autorizado para acción");
+            }
 
-            return Ok(result);
+            try
+            {
+                var content = await _mediator.Send(new UpdateBillingServiceCommand(request));
+
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-        [HttpDelete("DeleteBillingService/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
+        [HttpDelete("DeleteBillingService/{id}")]
+        [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingServiceResponse>> DeleteBillingService(int id)
         {
-            var result = await _mediator.Send(new DeleteBillingServiceCommand(id));
+            if (!User.IsInRole("Administrator"))
+            {
+                return Unauthorized("Este usuario no esté autorizado para acción");
+            }
 
-            return Ok(result);
+            try
+            {
+                var content = await _mediator.Send(new DeleteBillingServiceCommand(id));
+
+                return Ok(content);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }

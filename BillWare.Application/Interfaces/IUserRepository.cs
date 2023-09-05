@@ -1,5 +1,4 @@
-﻿using BillWare.Application.Security.Models;
-using BillWare.Security.Entities;
+﻿using BillWare.Security.Entities;
 
 namespace BillWare.Application.Interfaces
 {
@@ -8,5 +7,7 @@ namespace BillWare.Application.Interfaces
         Task<PaginationResult<UserIdentity>> GetUsersPaged(int pageIndex, int pageSize);
 
         Task<PaginationResult<UserIdentity>> GetUsersPagedWithSearch(int pageIndex, int pageSize, string search);
+
+        Task<UserIdentity> UpdateUser(UserIdentity user);
     }
 }

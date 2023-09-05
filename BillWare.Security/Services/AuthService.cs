@@ -28,6 +28,7 @@ namespace BillWare.Infrastructure.Security.Services
 
         public async Task<AuthResponse> Login(AuthRequest request)
         {
+
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
@@ -44,12 +45,17 @@ namespace BillWare.Infrastructure.Security.Services
             
             var token = await GenerateToken(user);
 
+            var userRole = await _userManager.GetRolesAsync(user);
+
             var authResponse = new AuthResponse
             {
                 Id = user.Id,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Email = user.Email,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Role = userRole.FirstOrDefault(),
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
 
             return authResponse;
@@ -79,7 +85,7 @@ namespace BillWare.Infrastructure.Security.Services
 
             if (isCreated.Succeeded)
             {
-                await _userManager.AddToRoleAsync(newUser, "Operator");
+                await _userManager.AddToRoleAsync(newUser, request.Role);
 
                 var token = await GenerateToken(newUser);
 

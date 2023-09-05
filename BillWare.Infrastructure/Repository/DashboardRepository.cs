@@ -28,6 +28,9 @@ namespace BillWare.Infrastructure.Repository
                     Amount = group.Sum(v => v.TotalPriceWithTax)
                 }).ToListAsync();
 
+            if(salesPerMonth == null)
+                throw new CrudOperationException("No se encontraron ventas");
+
             return salesPerMonth;
         }
 
@@ -42,6 +45,9 @@ namespace BillWare.Infrastructure.Repository
                         SaleDate = group.Key.ToString("dd/MM/yyyy"),
                         Amount = group.Sum(v => v.TotalPriceWithTax)
                     }).ToListAsync();
+
+            if(salesPerDay == null)
+                throw new CrudOperationException("No se encontraron ventas");
 
             return salesPerDay;
         }
