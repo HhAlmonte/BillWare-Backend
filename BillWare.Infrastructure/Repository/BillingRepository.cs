@@ -23,7 +23,7 @@ namespace BillWare.Infrastructure.Repository
 
             if(@params.InitialDate != null && @params.FinalDate != null)
             {
-                billings = billings.Where(x => x.CreatedAt >= @params.InitialDate && x.CreatedAt <= @params.FinalDate);
+                billings = billings.Where(x => x.CreatedAt.Date >= @params.InitialDate.Value.Date && x.CreatedAt.Date <= @params.FinalDate.Value.Date);
             }
 
             var billingsReponse = await billings
@@ -45,6 +45,7 @@ namespace BillWare.Infrastructure.Repository
         {
             var billings = await _dbSet
                 .Include(x => x.BillingItems)
+                .OrderByDescending(x => x.CreatedAt)
                 .GetPage(pageIndex, pageSize);
 
             return billings;

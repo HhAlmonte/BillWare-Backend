@@ -79,6 +79,8 @@ namespace BillWare.Infrastructure.Security.Services
                 EmailConfirmed = true,
                 NumberId = request.NumberId,
                 Address = request.Address,  
+                CreatedAt = DateTime.Now,
+                Role = request.Role
             };
 
             var isCreated = await _userManager.CreateAsync(newUser, request.Password);
@@ -86,8 +88,6 @@ namespace BillWare.Infrastructure.Security.Services
             if (isCreated.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newUser, request.Role);
-
-                var token = await GenerateToken(newUser);
 
                 return new RegistrationResponse
                 {

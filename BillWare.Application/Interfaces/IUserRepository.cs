@@ -9,5 +9,7 @@ namespace BillWare.Application.Interfaces
         Task<PaginationResult<UserIdentity>> GetUsersPagedWithSearch(int pageIndex, int pageSize, string search);
 
         Task<UserIdentity> UpdateUser(UserIdentity user);
+
+        Task<bool> DeleteUser(string id);
     }
 }

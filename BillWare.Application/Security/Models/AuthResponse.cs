@@ -1,8 +1,9 @@
-﻿using BillWare.Application.Shared.Models;
+﻿using BillWare.Application.Common.Models;
+using BillWare.Application.Shared.Models;
 
 namespace BillWare.Application.Security.Models
 {
-    public class AuthResponse : BaseResponse
+    public class AuthResponse : BaseSecurityResponse
     {
         public string UserName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

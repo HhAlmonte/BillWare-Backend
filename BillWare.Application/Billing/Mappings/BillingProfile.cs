@@ -14,6 +14,8 @@ namespace BillWare.Application.Billing.Mappings
 
             CreateMap<BillingEntity, BillingRequest>().ReverseMap();
 
+            CreateMap<BillingItemEntity, BillingItemRequest>().ReverseMap();
+
             CreateMap<BillingItemEntity, BillingItemResponse>().ReverseMap();
         }
     }

@@ -20,7 +20,7 @@ namespace BillWare.API.Controllers
         }
 
         [HttpGet("GetUsersPaged")]
-        /*[Authorize(Roles = "Administrator")]*/
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PaginationResult<UserResponse>>> GetUsersPaged([FromQuery] int pageIndex, int pageSize)
         {
@@ -30,11 +30,21 @@ namespace BillWare.API.Controllers
         }
 
         [HttpPut("UpdateUser")]
-        /*[Authorize(Roles = "Administrator")]*/
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<UserResponse>> UpdateUser([FromBody] UpdateUserRequest request)
         {
             var response = await mediator.Send(new UpdateUserComand(request));
+
+            return Ok(response);
+        }
+
+        [HttpDelete("DeleteUser/{id}")]
+        [Authorize(Roles = "Administrator")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> DeleteUser(string id)
+        {
+            var response = await mediator.Send(new DeleteUserCommand(id));
 
             return Ok(response);
         }

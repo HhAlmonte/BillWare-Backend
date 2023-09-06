@@ -22,11 +22,22 @@ namespace BillWare.API.Controllers
 
         [HttpGet("GetCostumerById")]
         [Authorize]
-        public async Task<IActionResult> GetCostumerById(int id)
+        public async Task<ActionResult<CostumerResponse>> GetCostumerById(int id)
         {
-            var costumer = await _mediator.Send(new GetCostumerByIdQuery(id));
+            try
+            {
+                var costumer = await _mediator.Send(new GetCostumerByIdQuery(id));
 
-            return Ok(costumer);
+                return Ok(costumer);
+            }
+            catch (CrudOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

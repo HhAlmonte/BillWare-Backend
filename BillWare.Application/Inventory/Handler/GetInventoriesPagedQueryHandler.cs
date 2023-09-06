@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BillWare.Application.Interfaces;
 using BillWare.Application.Inventory.Entities;
 using BillWare.Application.Inventory.Models;
 using BillWare.Application.Inventory.Query;
@@ -9,10 +10,10 @@ namespace BillWare.Application.Inventory.Handler
 {
     public class GetInventoriesPagedQueryHandler : IRequestHandler<GetInventoriesPagedQuery, PaginationResult<InventoryResponse>>
     {
-        private readonly IBaseCrudRepository<InventoryEntity> _inventoryRepository;
+        private readonly IInventoryRepository _inventoryRepository;
         private readonly IMapper _mapper;
 
-        public GetInventoriesPagedQueryHandler(IBaseCrudRepository<InventoryEntity> inventoryRepository, IMapper mapper)
+        public GetInventoriesPagedQueryHandler(IInventoryRepository inventoryRepository, IMapper mapper)
         {
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;

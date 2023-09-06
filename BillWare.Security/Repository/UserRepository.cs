@@ -18,15 +18,26 @@ namespace BillWare.Infrastructure.Security.Repository
             _context = context;
         }
 
+        public async Task<bool> DeleteUser(string id)
+        { 
+            var userToDelete = await _context.Users.FindAsync(id);
+
+            if (userToDelete == null)
+            {
+                throw new Exception("User not found");
+            }
+
+
+            await _userManager.DeleteAsync(userToDelete);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<PaginationResult<UserIdentity>> GetUsersPaged(int pageIndex, int pageSize)
         {
             var usersPaged = await _context.Users.GetPage(pageIndex, pageSize);
-
-            foreach (var user in usersPaged.Items)
-            {
-                var userRole = await _userManager.GetRolesAsync(user);
-                user.Role = userRole.FirstOrDefault();
-            }
 
             return usersPaged;
         }
@@ -49,7 +60,8 @@ namespace BillWare.Infrastructure.Security.Repository
 
             if (!isInRole)
             {
-                await _userManager.RemoveFromRoleAsync(userToUpdate, user.Role);
+                await _userManager.RemoveFromRoleAsync(userToUpdate, userToUpdate.Role);
+
                 await _userManager.AddToRoleAsync(userToUpdate, user.Role);
             }
 

@@ -66,20 +66,9 @@ namespace BillWare.API.Controllers
         [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingServiceResponse>> GetBillingsServicesPagedWithSearch(int pageIndex, int pageSize, string search)
         {
-            try
-            {
-                var content = await _mediator.Send(new GetBillingsServicesPagedWithSearchQuery(pageIndex, pageSize, search));
+            var content = await _mediator.Send(new GetBillingsServicesPagedWithSearchQuery(pageIndex, pageSize, search));
 
-                return Ok(content);
-            }
-            catch (CrudOperationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(content);
         }
 
         [Authorize(Roles = "Administrator")]

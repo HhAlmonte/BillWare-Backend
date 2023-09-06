@@ -18,6 +18,7 @@ namespace BillWare.Application.Billing.Entities
         public decimal TotalPriceWithTax { get; set; }
         public decimal TotalTax { get; set; }
 
+        public PaymentMethod PaymentMethod { get; set; }
         public BillingStatus BillingStatus { get; set; }
         public List<BillingItemEntity> BillingItems { get; set; }
     }

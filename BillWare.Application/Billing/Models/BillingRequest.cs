@@ -18,8 +18,9 @@
         public decimal TotalPriceWithTax { get; set; }
         public decimal TotalTax { get; set; }
 
+        public int PaymentMethod { get; set; }
         public int BillingStatus { get; set; }
-        public List<BillingItemResponse> BillingItems { get; set; }
+        public List<BillingItemRequest> BillingItems { get; set; }
 
         public DateTime CreatedAt { get; set; }
     }

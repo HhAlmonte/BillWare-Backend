@@ -22,8 +22,7 @@ namespace BillWare.Application.Costumer.Handler
         {
             var costumer = await _costumerRepository.GetEntityByIdAsync(request.Id);
 
-            if (costumer == null)
-                throw new CrudOperationException("Costumer not found");
+            if (costumer == null) throw new CrudOperationException("Costumer not found");
 
             return _mapper.Map<CostumerResponse>(costumer);
         }
