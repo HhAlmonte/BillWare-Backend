@@ -56,9 +56,9 @@ namespace BillWare.Infrastructure.Security.Repository
                 throw new Exception("User not found");
             }
 
-            var isInRole = await _userManager.IsInRoleAsync(userToUpdate, user.Role);
+            var isInRole = await _userManager.IsInRoleAsync(userToUpdate, userToUpdate.Role);
 
-            if (!isInRole)
+            if (isInRole)
             {
                 await _userManager.RemoveFromRoleAsync(userToUpdate, userToUpdate.Role);
 
@@ -71,6 +71,7 @@ namespace BillWare.Infrastructure.Security.Repository
             userToUpdate.UserName = user.UserName;
             userToUpdate.NumberId = user.NumberId;
             userToUpdate.Address = user.Address;
+            userToUpdate.Role = user.Role;
 
             await _userManager.UpdateAsync(userToUpdate);
 
