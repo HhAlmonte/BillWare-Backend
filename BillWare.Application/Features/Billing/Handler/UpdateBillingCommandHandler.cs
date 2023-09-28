@@ -37,7 +37,7 @@ namespace BillWare.Application.Features.Billing.Handler
 
         public async Task<BillingResponse> Handle(UpdateBillingCommand request, CancellationToken cancellationToken)
         {
-            var billing = _mapper.Map<BillingEntity>(request.Request);
+            var billing = _mapper.Map<BillingEntity>(request);
 
             billing.TotalPrice = billing.BillingItems.Sum(x => x.Price * x.Quantity);
 
@@ -79,9 +79,9 @@ namespace BillWare.Application.Features.Billing.Handler
                 }
             }
 
-            if (request.Request.BillingStatus == (int)BillingStatus.Invoiced)
+            if (request.BillingStatus == BillingStatus.Invoiced)
             {
-                var emailResponse = await _emailServices.SendEmailWithAttachmentsAsync("hbalmontess272@gmail.com", "Factura", "Su factura ha sido generada.", request.InvoiceDocument);
+                var emailResponse = await _emailServices.SendEmailAsync("hbalmontess272@gmail.com", "Factura", "Su factura ha sido generada.");
 
                 if (!emailResponse)
                 {

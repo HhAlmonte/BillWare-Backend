@@ -68,7 +68,7 @@ namespace BillWare.API.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPut("UpdateBillingService")]
+        [HttpPut("Update")]
         [ProducesResponseType(typeof(ServiceResponse), (int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<ServiceResponse>> UpdateService(UpdateServiceCommand command)
@@ -79,7 +79,7 @@ namespace BillWare.API.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpDelete("DeleteBillingService/{id}")]
+        [HttpDelete("Delete/{id}")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<bool>> DeleteService(int id)

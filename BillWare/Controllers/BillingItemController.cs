@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -9,20 +10,22 @@ namespace BillWare.API.Controllers
     [ApiController]
     public class BillingItemController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public BillingItemController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
-        [HttpDelete("DeleteBillingItem")]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("Delete")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<bool>> Delete(int id)
         {
-            var request = await mediator.Send(new DeleteBillingItemCommand(id));
+            var response = await _mediator.Send(new DeleteBillingItemCommand(id));
 
-            return Ok(request);
+            return Ok(response);
         }
     }
 }

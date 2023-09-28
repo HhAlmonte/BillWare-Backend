@@ -23,7 +23,7 @@ namespace BillWare.API.Controllers
 
         [Authorize]
         [HttpGet("GetListPagedWithSearch")]
-        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PaginationResult<CategoryResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<CategoryResponse>>> GetCategoriesPagedWithSearch(string search, int pageIndex, int pageSize)
         {
             var query = new GetCategoriesPagedWithSearchQuery

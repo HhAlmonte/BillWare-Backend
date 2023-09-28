@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BillWare.Application.Common.Enum;
-using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
@@ -18,7 +17,7 @@ namespace BillWare.Application.Features.Billing.Handler
         private readonly IMapper _mapper;
 
         public CreateBillingCommandHandler(IBillingRepository billingRepository,
-                                           IInventoryRepository inventoryRepository, 
+                                           IInventoryRepository inventoryRepository,
                                            ILogger<CreateBillingCommandHandler> logger,
                                            IMapper mapper)
         {
@@ -30,13 +29,13 @@ namespace BillWare.Application.Features.Billing.Handler
 
         public async Task<BillingResponse> Handle(CreateBillingCommand request, CancellationToken cancellationToken)
         {
-            var billingToCreate = _mapper.Map<BillingEntity>(request.Request);
+            var billingToCreate = _mapper.Map<BillingEntity>(request);
 
             billingToCreate.TotalPrice = billingToCreate.BillingItems.Sum(x => x.Price * x.Quantity);
 
             var billingCreated = await _billingRepository.CreateEntityAsync(billingToCreate);
 
-            _logger.LogInformation($"Se ha creado la entidad Factura con Id: {billingCreated.Id}"); 
+            _logger.LogInformation($"Se ha creado la entidad Factura con Id: {billingCreated.Id}");
 
             if (billingCreated.BillingStatus != BillingStatus.Cancelled)
             {

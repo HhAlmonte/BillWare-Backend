@@ -1,6 +1,8 @@
-﻿using BillWare.Application.Features.Account.Models;
+﻿using BillWare.Application.Contracts;
+using BillWare.Application.Features.Account.Models;
 using BillWare.Application.Features.Security.Entities;
 using BillWare.Application.Interfaces;
+using BillWare.Identity.Services;
 using BillWare.Infrastructure.Security.Repository;
 using BillWare.Infrastructure.Security.Services;
 using BillWare.Security.Context;
@@ -29,6 +31,8 @@ namespace BillWare.Infrastructure.Security
                 .AddDefaultTokenProviders();
 
             services.AddTransient<IAuthService, AuthService>();
+
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddAuthentication(op =>
             {

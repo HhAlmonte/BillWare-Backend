@@ -65,7 +65,7 @@ namespace BillWare.API.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPut("UpdateInventory")]
+        [HttpPut("Update")]
         [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<InventoryResponse>> UpdateInventory(UpdateInventoryCommand command)
@@ -76,7 +76,7 @@ namespace BillWare.API.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpDelete("DeleteInventory/{id}")]
+        [HttpDelete("Delete/{id}")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<bool>> DeleteInventory(int id)

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Models;
 using BillWare.Application.Features.Billing.Query;
@@ -8,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -15,7 +15,7 @@ namespace BillWare.API.Controllers
     [ApiController]
     public class BillingController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
         private readonly IBillingRepository _billingRepository;
         private readonly IMapper _mapper;
 
@@ -23,157 +23,83 @@ namespace BillWare.API.Controllers
         {
             _mapper = mapper;
             _billingRepository = billingRepository;
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
 
         [Authorize]
-        [HttpPost("CreateBilling")]
-        [ProducesResponseType(typeof(DataTable), 200)]
-        public async Task<ActionResult<BillingResponse>> CreateBilling([FromBody] BillingRequest request)
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(BillingResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<BillingResponse>> CreateBilling(CreateBillingCommand command)
         {
-            try
-            {
-                var content = await mediator.Send(new CreateBillingCommand(request));
+            var response = await _mediator.Send(command);
 
-                return Ok(content);
-            }
-            catch (ValidationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
 
         [Authorize]
-        [HttpGet("GetBillingsPaged")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [HttpGet("GetListPaged")]
+        [ProducesResponseType(typeof(PaginationResult<BillingResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillings(int pageIndex, int pageSize)
         {
-            try
-            {
-                var content = await mediator.Send(new GetBillingsPagedQuery(pageIndex, pageSize));
+            var response = await _mediator.Send(new GetBillingsPagedQuery(pageIndex, pageSize));
 
-                return Ok(content);
-            }
-            catch (ValidationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
 
         [Authorize]
-        [HttpGet("GetBillingsPagedWithParams")]
+        [HttpGet("GetListPagedWithParams")]
         [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsPagedWithParams([FromQuery] ParamsRequest @params)
         {
-            try
-            {
-                var content = await _billingRepository.GetBillingsPagedWithParams(@params);
+            var content = await _billingRepository.GetBillingsPagedWithParams(@params);
 
-                var contentMapped = _mapper.Map<PaginationResult<BillingResponse>>(content);
+            var contentMapped = _mapper.Map<PaginationResult<BillingResponse>>(content);
 
-                return Ok(contentMapped);
-            }
-            catch (ValidationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(contentMapped);
         }
 
         [Authorize]
-        [HttpGet("GetBillingsWithSearchPaged")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [HttpGet("GetListPagedWithSearch")]
+        [ProducesResponseType(typeof(PaginationResult<BillingResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsWithSearch(string search, int pageIndex, int pageSize)
         {
-            try
-            {
-                var content = await mediator.Send(new GetBillingsPagedWithSearchQuery(search, pageIndex, pageSize));
+            var response = await _mediator.Send(new GetBillingsPagedWithSearchQuery(search, pageIndex, pageSize));
 
-                return Ok(content);
-            }
-            catch (ValidationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
 
+        [HttpDelete("Delete/{id}")]
         [Authorize(Roles = "Administrator")]
-        [HttpDelete("DeleteBilling")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
         public async Task<ActionResult<bool>> DeleteBilling(int id)
         {
-            try
-            {
-                var response = await mediator.Send(new DeleteBillingCommand(id));
+            var response = await _mediator.Send(new DeleteBillingCommand(id));
 
-                return Ok(response);
-            }
-            catch (ValidationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
 
         [Authorize]
-        [HttpPut("UpdateBilling")]
-        [ProducesResponseType(typeof(DataTable), 200)]
-        public async Task<ActionResult<BillingResponse>> UpdateBilling([FromBody] BillingRequest request)
+        [HttpPut("Update")]
+        [ProducesResponseType(typeof(BillingResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<BillingResponse>> UpdateBilling(UpdateBillingCommand command)
         {
-            try
-            {
-                var content = await mediator.Send(new UpdateBillingCommand(request, request.InvoiceDocument));
+            var response = await _mediator.Send(command);
 
-                return Ok(content);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
 
         [Authorize]
         [HttpGet("GetInvoiceNumber")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> GetInvoiceNumber()
         {
-            try
-            {
-                var content = await _billingRepository.GetInvoiceNumber();
+            var response = await _billingRepository.GetInvoiceNumber();
 
-                return Ok(content);
-            }
-            catch (ValidationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
     }
 }

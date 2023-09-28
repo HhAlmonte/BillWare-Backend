@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
 
@@ -12,7 +13,8 @@ namespace BillWare.Application.Features.Billing.Mappings
 
             CreateMap<BillingEntity, BillingResponse>().ReverseMap();
 
-            CreateMap<BillingEntity, BillingRequest>().ReverseMap();
+            CreateMap<BillingEntity, CreateBillingCommand>().ReverseMap();
+            CreateMap<BillingEntity, UpdateBillingCommand>().ReverseMap();
 
             CreateMap<BillingItemEntity, BillingItemRequest>().ReverseMap();
 
