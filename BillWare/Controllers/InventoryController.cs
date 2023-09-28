@@ -77,9 +77,9 @@ namespace BillWare.API.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpDelete("DeleteInventory/{id}")]
-        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> DeleteInventory(int id)
+        public async Task<ActionResult<bool>> DeleteInventory(int id)
         {
             var response = await _mediator.Send(new DeleteInventoryCommand(id));
 

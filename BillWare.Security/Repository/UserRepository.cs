@@ -16,21 +16,27 @@ namespace BillWare.Infrastructure.Security.Repository
             _context = context;
         }
 
-        public async Task<bool> DeleteUser(string id)
+        public async Task<bool> DeleteUser(UserIdentity user)
         {
-            var userToDelete = await _context.Users.FindAsync(id);
-
-            if (userToDelete == null)
-            {
-                throw new Exception("User not found");
-            }
-
-
-            await _userManager.DeleteAsync(userToDelete);
+            await _userManager.DeleteAsync(user);
 
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<UserIdentity> GetUserById(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            return user;
+        }
+
+        public async Task<UserIdentity> GetUserByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return user;
         }
 
         public async Task<PaginationResult<UserIdentity>> GetUsersPaged(int pageIndex, int pageSize)
@@ -47,35 +53,11 @@ namespace BillWare.Infrastructure.Security.Repository
 
         public async Task<UserIdentity> UpdateUser(UserIdentity user)
         {
-            var userToUpdate = await _context.Users.FindAsync(user.Id);
-
-            if (userToUpdate == null)
-            {
-                throw new Exception("User not found");
-            }
-
-            var isInRole = await _userManager.IsInRoleAsync(userToUpdate, userToUpdate.Role);
-
-            if (isInRole)
-            {
-                await _userManager.RemoveFromRoleAsync(userToUpdate, userToUpdate.Role);
-
-                await _userManager.AddToRoleAsync(userToUpdate, user.Role);
-            }
-
-            userToUpdate.FirstName = user.FirstName;
-            userToUpdate.LastName = user.LastName;
-            userToUpdate.Email = user.Email;
-            userToUpdate.UserName = user.UserName;
-            userToUpdate.NumberId = user.NumberId;
-            userToUpdate.Address = user.Address;
-            userToUpdate.Role = user.Role;
-
-            await _userManager.UpdateAsync(userToUpdate);
+            await _userManager.UpdateAsync(user);
 
             await _context.SaveChangesAsync();
 
-            return userToUpdate;
+            return user;
         }
     }
 }

@@ -1,6 +1,13 @@
-﻿using BillWare.Application.Features.Security.Models;
+﻿using BillWare.Application.Features.Account.Command;
+using BillWare.Application.Features.Account.Models;
+using BillWare.Application.Features.Costumer.Models;
+using BillWare.Application.Features.Security.Models;
 using BillWare.Application.Interfaces;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -8,25 +15,30 @@ namespace BillWare.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IMediator _mediator;
 
-        public AccountController(IAuthService authService)
+        public AccountController(IMediator mediator)
         {
-            _authService = authService;
+            _mediator = mediator;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponse>> Login([FromBody] AuthRequest request)
+        [ProducesResponseType(typeof(AuthResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AuthResponse>> Login(SignInUserCommand command)
         {
-            var response = await _authService.Login(request);
+            var response = await _mediator.Send(command);
 
             return Ok(response);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost("register")]
-        public async Task<ActionResult<AuthResponse>> Register([FromBody] RegistrationRequest request)
+        [ProducesResponseType(typeof(RegistrationResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<RegistrationResponse>> Register(RegisterUserCommand command)
         {
-            var response = await _authService.Register(request);
+            var response = await _mediator.Send(command);
 
             return Ok(response);
         }

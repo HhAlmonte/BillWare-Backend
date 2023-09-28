@@ -1,5 +1,5 @@
-﻿using BillWare.Application.Features.Security.Entities;
-using BillWare.Application.Features.Security.Models;
+﻿using BillWare.Application.Features.Account.Models;
+using BillWare.Application.Features.Security.Entities;
 using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Security.Repository;
 using BillWare.Infrastructure.Security.Services;

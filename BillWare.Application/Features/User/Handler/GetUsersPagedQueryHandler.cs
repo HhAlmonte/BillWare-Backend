@@ -21,9 +21,9 @@ namespace BillWare.Application.Features.Security.Handler
         {
             var usersPaged = await _userRepository.GetUsersPaged(request.PageIndex, request.PageSize);
 
-            var usersPagedResponse = _mapper.Map<PaginationResult<UserResponse>>(usersPaged);
+            var usersPagedMapped = _mapper.Map<PaginationResult<UserResponse>>(usersPaged);
 
-            return usersPagedResponse;
+            return usersPagedMapped;
         }
     }
 }

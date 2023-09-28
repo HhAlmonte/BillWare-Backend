@@ -1,6 +1,9 @@
-﻿namespace BillWare.Application.Features.Security.Models
+﻿using BillWare.Application.Features.Account.Models;
+using MediatR;
+
+namespace BillWare.Application.Features.Account.Command
 {
-    public class RegistrationRequest
+    public class RegisterUserCommand : IRequest<RegistrationResponse>
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

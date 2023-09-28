@@ -10,6 +10,10 @@ namespace BillWare.Application.Interfaces
 
         Task<UserIdentity> UpdateUser(UserIdentity user);
 
-        Task<bool> DeleteUser(string id);
+        Task<UserIdentity> GetUserById(string id);
+
+        Task<UserIdentity> GetUserByEmail(string email);
+
+        Task<bool> DeleteUser(UserIdentity user);
     }
 }

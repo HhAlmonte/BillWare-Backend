@@ -1,6 +1,9 @@
-﻿namespace BillWare.Application.Features.Security.Models
+﻿using BillWare.Application.Features.Security.Models;
+using MediatR;
+
+namespace BillWare.Application.Features.Security.Command
 {
-    public class UpdateUserRequest
+    public class UpdateUserComand : IRequest<UserResponse>
     {
         public string Id { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;

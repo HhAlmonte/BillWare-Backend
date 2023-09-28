@@ -1,7 +1,7 @@
 ﻿using BillWare.Application.Common.Models;
 using BillWare.Application.Shared.Models;
 
-namespace BillWare.Application.Features.Security.Models
+namespace BillWare.Application.Features.Account.Models
 {
     public class AuthResponse : BaseSecurityResponse
     {

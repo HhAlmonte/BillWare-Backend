@@ -1,4 +1,4 @@
-﻿namespace BillWare.Application.Features.Security.Models
+﻿namespace BillWare.Application.Features.Account.Models
 {
     public class RegistrationResponse
     {

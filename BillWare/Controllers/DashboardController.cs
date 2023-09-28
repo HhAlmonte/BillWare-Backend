@@ -18,46 +18,22 @@ namespace BillWare.API.Controllers
 
         [HttpGet("GetSalesLast30Days")]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [ProducesResponseType(typeof(StatisticsResponse), 200)]
         public async Task<ActionResult<StatisticsResponse>> GetSalesLast30Days()
         {
-            if (!User.IsInRole("Administrator"))
-            {
-                return Unauthorized("Este usuario no esté autorizado para acción");
-            }
+            var response = await _dashboardRepository.GetSalesLast30Days();
 
-            try
-            {
-                var content = await _dashboardRepository.GetSalesLast30Days();
-
-                return Ok(content);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
 
         [HttpGet("GetSalesLast12Month")]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [ProducesResponseType(typeof(StatisticsResponse), 200)]
         public async Task<ActionResult<StatisticsResponse>> GetSalesLast12Month()
         {
-            if (!User.IsInRole("Administrator"))
-            {
-                return Unauthorized("Este usuario no esté autorizado para acción");
-            }
+            var response = await _dashboardRepository.GetSalesLast12Month();
 
-            try
-            {
-                var content = await _dashboardRepository.GetSalesLast12Month();
-
-                return Ok(content);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(response);
         }
     }
 }

@@ -4,6 +4,7 @@ using BillWare.Application.Features.Security.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -11,39 +12,47 @@ namespace BillWare.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public UserController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
-        [HttpGet("GetUsersPaged")]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PaginationResult<UserResponse>>> GetUsersPaged([FromQuery] int pageIndex, int pageSize)
+        [HttpGet("GetListPaged")]
+        [ProducesResponseType(typeof(PaginationResult<UserResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<PaginationResult<UserResponse>>> GetUsersPaged(int pageIndex, int pageSize)
         {
-            var response = await mediator.Send(new GetUsersPagedQuery(pageIndex, pageSize));
+            var query = new GetUsersPagedQuery
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+
+            var response = await _mediator.Send(query);
 
             return Ok(response);
         }
 
-        [HttpPut("UpdateUser")]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<UserResponse>> UpdateUser([FromBody] UpdateUserRequest request)
+        [HttpPut("Update")]
+        [ProducesResponseType(typeof(UserResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<UserResponse>> UpdateUser(UpdateUserComand command)
         {
-            var response = await mediator.Send(new UpdateUserComand(request));
+            var response = await _mediator.Send(command);
 
             return Ok(response);
         }
 
-        [HttpDelete("DeleteUser/{id}")]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
         public async Task<ActionResult<bool>> DeleteUser(string id)
         {
-            var response = await mediator.Send(new DeleteUserCommand(id));
+            var response = await _mediator.Send(new DeleteUserCommand(id));
 
             return Ok(response);
         }
