@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BillWare.Infrastructure\BillWare.Infrastructure.csproj" />
-    <ProjectReference Include="..\BillWare.Security\BillWare.Infrastructure.Security.csproj" />
+    <ProjectReference Include="..\BillWare.Security\BillWare.Identity.csproj" />
   </ItemGroup>
 
 </Project>

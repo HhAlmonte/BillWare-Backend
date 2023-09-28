@@ -1,9 +1,7 @@
-﻿using BillWare.Application.Interfaces;
-using BillWare.Application.Security.Models;
+﻿using BillWare.Application.Features.Security.Entities;
+using BillWare.Application.Interfaces;
 using BillWare.Security.Context;
-using BillWare.Security.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace BillWare.Infrastructure.Security.Repository
 {
@@ -19,7 +17,7 @@ namespace BillWare.Infrastructure.Security.Repository
         }
 
         public async Task<bool> DeleteUser(string id)
-        { 
+        {
             var userToDelete = await _context.Users.FindAsync(id);
 
             if (userToDelete == null)

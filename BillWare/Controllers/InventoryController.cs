@@ -1,10 +1,11 @@
-﻿using BillWare.Application.Inventory.Command;
-using BillWare.Application.Inventory.Models;
-using BillWare.Application.Inventory.Query;
+﻿using BillWare.Application.Features.Costumer.Models;
+using BillWare.Application.Features.Inventory.Command;
+using BillWare.Application.Features.Inventory.Models;
+using BillWare.Application.Features.Inventory.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -19,75 +20,70 @@ namespace BillWare.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetInventoryWithSearch")]
         [Authorize]
+        [HttpGet("GetListPagedWithSearch")]
+        [ProducesResponseType(typeof(PaginationResult<InventoryResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<InventoryResponse>>> GetInventoryWithSearch(string search, int pageIndex, int pageSize)
         {
-            var inventory = await _mediator.Send(new GetInventoriesPagedWithSearchQuery(search, pageIndex, pageSize));
+            var query = new GetInventoriesPagedWithSearchQuery
+            {
+                Search = search,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
 
-            return Ok(inventory);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-        [HttpGet("GetInventoriesPaged")]
         [Authorize]
+        [HttpGet("GetListPaged")]
+        [ProducesResponseType(typeof(PaginationResult<InventoryResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<InventoryResponse>>> GetInventoriesPaged(int pageIndex, int pageSize)
         {
-            var inventories = await _mediator.Send(new GetInventoriesPagedQuery(pageIndex, pageSize));
+            var query = new GetInventoriesPagedQuery
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
 
-            return Ok(inventories);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-        [HttpPost("CreateInventory")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<InventoryResponse>> CreateInventory(InventoryRequest inventory)
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<InventoryResponse>> CreateInventory(CreateInventoryCommand command)
         {
-            try
-            {
-                var createdInventory = await _mediator.Send(new CreateInventoryCommand(inventory));
+            var response = await _mediator.Send(command);
 
-                return Ok(createdInventory);
-            }
-            catch (CrudOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
-            }
+            return Ok(response);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPut("UpdateInventory")]
-        [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<InventoryResponse>> UpdateInventory(InventoryRequest inventory)
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<InventoryResponse>> UpdateInventory(UpdateInventoryCommand command)
         {
-            var updatedInventory = await _mediator.Send(new UpdateInventoryCommand(inventory));
+            var response = await _mediator.Send(command);
 
-            return Ok(updatedInventory);
+            return Ok(response);
         }
 
-        [HttpDelete("DeleteInventory/{id}")]
         [Authorize(Roles = "Administrator")]
+        [HttpDelete("DeleteInventory/{id}")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
         public async Task<ActionResult> DeleteInventory(int id)
         {
-            try
-            {
-                await _mediator.Send(new DeleteInventoryCommand(id));
+            var response = await _mediator.Send(new DeleteInventoryCommand(id));
 
-                return Ok();
-            }
-            catch (CrudOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
-            }
+            return Ok(response);
         }
     }
 }

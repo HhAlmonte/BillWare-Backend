@@ -1,8 +1,7 @@
-﻿using BillWare.Application.Billing.Command;
+﻿using BillWare.Application.Features.Billing.Command;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace BillWare.API.Controllers
 {

@@ -1,5 +1,5 @@
-﻿using BillWare.Infrastructure.Security.Configurations;
-using BillWare.Security.Entities;
+﻿using BillWare.Application.Features.Security.Entities;
+using BillWare.Infrastructure.Security.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

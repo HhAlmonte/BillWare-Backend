@@ -1,7 +1,7 @@
 ﻿using BillWare.Application.Common.Models;
+using BillWare.Application.Features.Security.Entities;
+using BillWare.Application.Features.Security.Models;
 using BillWare.Application.Interfaces;
-using BillWare.Application.Security.Models;
-using BillWare.Security.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

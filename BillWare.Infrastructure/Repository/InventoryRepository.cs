@@ -1,5 +1,5 @@
-﻿using BillWare.Application.Interfaces;
-using BillWare.Application.Inventory.Entities;
+﻿using BillWare.Application.Features.Inventory.Entities;
+using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 

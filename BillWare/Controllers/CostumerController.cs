@@ -1,11 +1,10 @@
-﻿using BillWare.Application.Costumer.Command;
-using BillWare.Application.Costumer.Models;
-using BillWare.Application.Costumer.Query;
+﻿using BillWare.Application.Features.Costumer.Command;
+using BillWare.Application.Features.Costumer.Models;
+using BillWare.Application.Features.Costumer.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -20,96 +19,82 @@ namespace BillWare.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetCostumerById")]
         [Authorize]
+        [HttpGet("GetById")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CostumerResponse>> GetCostumerById(int id)
         {
-            try
-            {
-                var costumer = await _mediator.Send(new GetCostumerByIdQuery(id));
+            var query = new GetCostumerByIdQuery(id);
 
-                return Ok(costumer);
-            }
-            catch (CrudOperationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-
-        [HttpGet("GetCostumersPagedWithSearch")]
         [Authorize]
+        [HttpGet("GetListPagedWithSearch")]
+        [ProducesResponseType(typeof(PaginationResult<CostumerResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<CostumerResponse>>> GetCostumersPagedWithSearch(string search, int pageIndex, int pageSize)
         {
-            var costumers = await _mediator.Send(new GetCostumersPagedWithSearchQuery(pageIndex, pageSize, search));
+            var query = new GetCostumersPagedWithSearchQuery
+            {
+                Search = search,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
 
-            return Ok(costumers);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-        [HttpGet("GetCostumersPaged")]
         [Authorize]
+        [HttpGet("GetListPaged")]
+        [ProducesResponseType(typeof(PaginationResult<CostumerResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<CostumerResponse>>> GetCostumersPaged(int pageIndex, int pageSize)
         {
-            var costumers = await _mediator.Send(new GetCostumersPagedQuery(pageIndex, pageSize));
+            var query = new GetCostumersPagedQuery
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
 
-            return Ok(costumers);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-        [HttpPost("CreateCostumer")]
         [Authorize]
-        public async Task<ActionResult<CostumerResponse>> CreateCostumer(CostumerRequest request)
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<CostumerResponse>> CreateCostumer(CreateCostumerCommand command)
         {
-            try
-            {
-                var createdCostumer = await _mediator.Send(new CreateCostumerCommand(request));
+            var response = await _mediator.Send(command);
 
-                return Ok(createdCostumer);
-            }
-            catch (CrudOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
-            }
+            return Ok(response);
         }
 
-        [HttpPut("UpdateCostumer")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<CostumerResponse>> UpdateCostumer(CostumerRequest request)
+        [HttpPut("Update")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<CostumerResponse>> UpdateCostumer(UpdateCostumerCommand command)
         {
-            var updatedCostumer = await _mediator.Send(new UpdateCostumerCommand(request));
+            var response = await _mediator.Send(command);
 
-            return Ok(updatedCostumer);
+            return Ok(response);
         }
 
-        [HttpDelete("DeleteCostumer/{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> DeleteCostumer(int id)
+        [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<bool>> DeleteCostumer(int id)
         {
-            try
-            {
-                await _mediator.Send(new DeleteCostumerCommand(id));
+            var response = await _mediator.Send(new DeleteCostumerCommand(id));
 
-                return Ok();
-            }
-            catch (CrudOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
-            }
+            return Ok(response);
         }
     }
 }

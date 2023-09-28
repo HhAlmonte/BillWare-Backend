@@ -1,5 +1,5 @@
-﻿using BillWare.Application.Interfaces;
-using BillWare.Application.Security.Models;
+﻿using BillWare.Application.Features.Security.Models;
+using BillWare.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillWare.API.Controllers

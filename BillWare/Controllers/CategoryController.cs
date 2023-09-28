@@ -1,11 +1,11 @@
-﻿using BillWare.Application.Category.Command;
-using BillWare.Application.Category.Models;
-using BillWare.Application.Category.Query;
+﻿using BillWare.Application.Features.Category.Command;
+using BillWare.Application.Features.Category.Models;
+using BillWare.Application.Features.Category.Query;
+using BillWare.Application.Features.Costumer.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
+using System.Net;
 
 namespace BillWare.API.Controllers
 {
@@ -21,75 +21,70 @@ namespace BillWare.API.Controllers
         }
 
 
-        [HttpGet("GetCategoriesPagedWithSearch")]
         [Authorize]
+        [HttpGet("GetListPagedWithSearch")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<CategoryResponse>>> GetCategoriesPagedWithSearch(string search, int pageIndex, int pageSize)
         {
-            var categories = await _mediator.Send(new GetCategoriesPagedWithSearchQuery(pageIndex, pageSize, search));
+            var query = new GetCategoriesPagedWithSearchQuery
+            {
+                Search = search,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
 
-            return Ok(categories);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-        [HttpGet("GetCategoriesPaged")]
         [Authorize]
+        [HttpGet("GetListPaged")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<CategoryResponse>>> GetCategoriesPaged(int pageIndex, int pageSize)
         {
-            var categories = await _mediator.Send(new GetCategoriesPagedQuery(pageIndex, pageSize));
+            var query = new GetCategoriesPagedQuery
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
 
-            return Ok(categories);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
-        [HttpPost("CreateCategory")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<CategoryResponse>> CreateCategory(CategoryRequest request)
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<CategoryResponse>> CreateCategory(CreateCategoryCommand command)
         {
-            try
-            {
-                var createdCategory = await _mediator.Send(new CreateCategoryCommand(request));
+            var response = await _mediator.Send(command);
 
-                return Ok(createdCategory);
-            }
-            catch (CrudOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
-            }
+            return Ok(response);
         }
 
-        [HttpPut("UpdateCategory")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<CategoryResponse>> UpdateCategory(CategoryRequest request)
+        [HttpPut("Update")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<CategoryResponse>> UpdateCategory(UpdateCategoryCommand command)
         {
-            var updatedCategory = await _mediator.Send(new UpdateCategoryCommand(request));
+            var response = await _mediator.Send(command);
 
-            return Ok(updatedCategory);
+            return Ok(response);
         }
 
-        [HttpDelete("DeleteCategory/{id}")]
         [Authorize(Roles = "Administrator")]
+        [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
         public async Task<ActionResult> DeleteCategory(int id)
         {
-            try
-            {
-                await _mediator.Send(new DeleteCategoryCommand(id));
+            var response = await _mediator.Send(new DeleteCategoryCommand(id));
 
-                return Ok();
-            }
-            catch (CrudOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno en el servidor.");
-            }
+            return Ok(response);
         }
     }
 }

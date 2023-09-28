@@ -1,8 +1,8 @@
-﻿using BillWare.Application.Billing.Entities;
-using BillWare.Application.BillingService.Entities;
-using BillWare.Application.Category.Entities;
-using BillWare.Application.Costumer.Entities;
-using BillWare.Application.Inventory.Entities;
+﻿using BillWare.Application.Features.Billing.Entities;
+using BillWare.Application.Features.BillingService.Entities;
+using BillWare.Application.Features.Category.Entities;
+using BillWare.Application.Features.Costumer.Entities;
+using BillWare.Application.Features.Inventory.Entities;
 using BillWare.Application.Shared.Entities;
 using BillWare.Infrastructure.Context.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +23,7 @@ namespace BillWare.Infrastructure.Context
 
         public DbSet<CostumerEntity> Costumers { get; set; }
         public DbSet<InventoryEntity> Inventories { get; set; }
-        public DbSet<BillingServiceEntity> BillingService { get; set; }
+        public DbSet<ServiceEntity> BillingService { get; set; }
         public DbSet<BillingEntity> Billings { get; set; }
         public DbSet<BillingItemEntity> BillingItems { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }

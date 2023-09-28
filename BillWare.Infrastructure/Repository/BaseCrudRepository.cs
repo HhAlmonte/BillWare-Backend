@@ -1,4 +1,4 @@
-﻿using BillWare.Application.Shared;
+﻿using BillWare.Application.Contracts;
 using BillWare.Application.Shared.Entities;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +26,8 @@ namespace BillWare.Infrastructure.Repository
             return entity;
         }
 
-        public async Task<bool> DeleteEntityByIdAsync(int id)
+        public async Task<bool> DeleteEntityByIdAsync(TEntity entity)
         {
-            var entity = await GetEntityByIdAsync(id);
-
-            if (entity == null) throw new Exception("Error deleting entity.");
-
             _dbSet.Remove(entity);
 
             await _dbContext.SaveChangesAsync();

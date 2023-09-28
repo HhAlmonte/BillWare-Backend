@@ -1,4 +1,4 @@
-﻿using BillWare.Application.Dashboard.Models;
+﻿using BillWare.Application.Features.Dashboard.Models;
 using BillWare.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +32,6 @@ namespace BillWare.API.Controllers
 
                 return Ok(content);
             }
-            catch (CrudOperationException ex)
-            {
-                return NotFound(ex.Message);
-            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
@@ -57,10 +53,6 @@ namespace BillWare.API.Controllers
                 var content = await _dashboardRepository.GetSalesLast12Month();
 
                 return Ok(content);
-            }
-            catch (CrudOperationException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

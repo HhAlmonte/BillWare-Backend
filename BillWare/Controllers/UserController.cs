@@ -1,9 +1,8 @@
-﻿using BillWare.Application.Security.Command;
-using BillWare.Application.Security.Models;
-using BillWare.Application.Security.Query;
+﻿using BillWare.Application.Features.Security.Command;
+using BillWare.Application.Features.Security.Models;
+using BillWare.Application.Features.Security.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillWare.API.Controllers

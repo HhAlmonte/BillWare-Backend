@@ -1,9 +1,9 @@
-﻿using BillWare.Application.Interfaces;
-using BillWare.Application.Security.Models;
+﻿using BillWare.Application.Features.Security.Entities;
+using BillWare.Application.Features.Security.Models;
+using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Security.Repository;
 using BillWare.Infrastructure.Security.Services;
 using BillWare.Security.Context;
-using BillWare.Security.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

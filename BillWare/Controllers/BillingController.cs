@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using BillWare.Application.Billing.Command;
-using BillWare.Application.Billing.Models;
-using BillWare.Application.Billing.Query;
+using BillWare.Application.Exceptions;
+using BillWare.Application.Features.Billing.Command;
+using BillWare.Application.Features.Billing.Models;
+using BillWare.Application.Features.Billing.Query;
 using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,7 @@ namespace BillWare.API.Controllers
         }
 
 
-        [Authorize] 
+        [Authorize]
         [HttpPost("CreateBilling")]
         [ProducesResponseType(typeof(DataTable), 200)]
         public async Task<ActionResult<BillingResponse>> CreateBilling([FromBody] BillingRequest request)
@@ -37,7 +38,7 @@ namespace BillWare.API.Controllers
 
                 return Ok(content);
             }
-            catch (CrudOperationException ex)
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -58,9 +59,13 @@ namespace BillWare.API.Controllers
 
                 return Ok(content);
             }
-            catch (CrudOperationException ex)
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {
@@ -81,7 +86,7 @@ namespace BillWare.API.Controllers
 
                 return Ok(contentMapped);
             }
-            catch (CrudOperationException ex)
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -102,7 +107,7 @@ namespace BillWare.API.Controllers
 
                 return Ok(content);
             }
-            catch (CrudOperationException ex)
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -123,7 +128,7 @@ namespace BillWare.API.Controllers
 
                 return Ok(response);
             }
-            catch (CrudOperationException ex)
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -140,13 +145,9 @@ namespace BillWare.API.Controllers
         {
             try
             {
-                var content = await mediator.Send(new UpdateBillingCommand(request));
+                var content = await mediator.Send(new UpdateBillingCommand(request, request.InvoiceDocument));
 
                 return Ok(content);
-            }
-            catch (CrudOperationException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -165,7 +166,7 @@ namespace BillWare.API.Controllers
 
                 return Ok(content);
             }
-            catch (CrudOperationException ex)
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }

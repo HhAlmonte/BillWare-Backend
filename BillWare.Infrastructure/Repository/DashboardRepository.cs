@@ -1,5 +1,6 @@
-﻿using BillWare.Application.Billing.Entities;
-using BillWare.Application.Dashboard.Models;
+﻿using BillWare.Application.Exceptions;
+using BillWare.Application.Features.Billing.Entities;
+using BillWare.Application.Features.Dashboard.Models;
 using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ namespace BillWare.Infrastructure.Repository
                 }).ToListAsync();
 
             if(salesPerMonth == null)
-                throw new CrudOperationException("No se encontraron ventas");
+                throw new ValidationException("No se encontraron ventas");
 
             return salesPerMonth;
         }
@@ -47,7 +48,7 @@ namespace BillWare.Infrastructure.Repository
                     }).ToListAsync();
 
             if(salesPerDay == null)
-                throw new CrudOperationException("No se encontraron ventas");
+                throw new ValidationException("No se encontraron ventas");
 
             return salesPerDay;
         }
