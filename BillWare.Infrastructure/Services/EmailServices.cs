@@ -1,16 +1,16 @@
 ﻿using BillWare.Application.Common.Models;
-using BillWare.Application.Interfaces;
+using BillWare.Application.Contracts.Service;
 using Microsoft.Extensions.Options;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 
 namespace BillWare.Infrastructure.Services
 {
-    public class EmailServices : IEmailServices
+    public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
 
-        public EmailServices(IOptions<EmailSettings> emailSettings)
+        public EmailService(IOptions<EmailSettings> emailSettings)
         {
             _emailSettings = emailSettings.Value;
         }
@@ -76,7 +76,7 @@ namespace BillWare.Infrastructure.Services
 
                     await smtpClient.SendMailAsync(message);
 
-                    return true; 
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -100,14 +100,14 @@ namespace BillWare.Infrastructure.Services
                         From = new MailAddress(_emailSettings.SmtpUserName),
                         Subject = subject,
                         Body = htmlBody,
-                        IsBodyHtml = true, 
+                        IsBodyHtml = true,
                     };
 
                     message.To.Add(to);
 
                     await smtpClient.SendMailAsync(message);
 
-                    return true; 
+                    return true;
                 }
             }
             catch (Exception ex)

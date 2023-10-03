@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Models;
 using BillWare.Application.Features.Billing.Query;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +50,7 @@ namespace BillWare.API.Controllers
 
         [Authorize]
         [HttpGet("GetListPagedWithParams")]
-        [ProducesResponseType(typeof(DataTable), 200)]
+        [ProducesResponseType(typeof(PaginationResult<BillingResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginationResult<BillingResponse>>> GetBillingsPagedWithParams([FromQuery] ParamsRequest @params)
         {
             var content = await _billingRepository.GetBillingsPagedWithParams(@params);

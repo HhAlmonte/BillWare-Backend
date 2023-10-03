@@ -38,7 +38,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddApplication();
+
 builder.Services.AddSecurity(builder.Configuration);
 
 builder.Services.AddCors(options =>
@@ -51,7 +53,6 @@ builder.Services.AddCors(options =>
             builder.AllowAnyMethod();
         });
 });
-
 
 var app = builder.Build();
 

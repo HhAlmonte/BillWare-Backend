@@ -1,4 +1,4 @@
-﻿using BillWare.Application.Contracts;
+﻿using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Shared.Entities;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;

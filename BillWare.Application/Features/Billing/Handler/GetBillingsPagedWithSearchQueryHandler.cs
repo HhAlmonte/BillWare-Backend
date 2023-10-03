@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Features.Billing.Models;
 using BillWare.Application.Features.Billing.Query;
-using BillWare.Application.Interfaces;
 using MediatR;
 
 namespace BillWare.Application.Features.Billing.Handler

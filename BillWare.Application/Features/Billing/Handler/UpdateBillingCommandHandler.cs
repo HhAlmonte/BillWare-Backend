@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BillWare.Application.Common.Enum;
-using BillWare.Application.Contracts;
+using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Service;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +16,6 @@ namespace BillWare.Application.Features.Billing.Handler
         private readonly IBillingRepository _billingRepository;
         private readonly IBaseCrudRepository<BillingItemEntity> _billingItemRepository;
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IEmailServices _emailServices;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateBillingCommandHandler> _logger;
 
@@ -24,15 +23,13 @@ namespace BillWare.Application.Features.Billing.Handler
                                            IInventoryRepository inventoryRepository,
                                            IBaseCrudRepository<BillingItemEntity> billingItemRepository,
                                            IMapper mapper,
-                                           ILogger<UpdateBillingCommandHandler> logger,
-                                           IEmailServices emailServices)
+                                           ILogger<UpdateBillingCommandHandler> logger)
         {
             _logger = logger;
             _billingItemRepository = billingItemRepository;
             _billingRepository = billingRepository;
             _inventoryRepository = inventoryRepository;
             _mapper = mapper;
-            _emailServices = emailServices;
         }
 
         public async Task<BillingResponse> Handle(UpdateBillingCommand request, CancellationToken cancellationToken)
@@ -79,15 +76,6 @@ namespace BillWare.Application.Features.Billing.Handler
                 }
             }
 
-            if (request.BillingStatus == BillingStatus.Invoiced)
-            {
-                var emailResponse = await _emailServices.SendEmailAsync("hbalmontess272@gmail.com", "Factura", "Su factura ha sido generada.");
-
-                if (!emailResponse)
-                {
-                    throw new Exception("No se pudo enviar el correo electrónico. Imprime la factura y entregasela al cliente!");
-                }
-            }
 
             return _mapper.Map<BillingResponse>(updatedBilling);
         }

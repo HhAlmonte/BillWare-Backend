@@ -1,5 +1,5 @@
-﻿using BillWare.Application.Features.Dashboard.Models;
-using BillWare.Application.Interfaces;
+﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Features.Dashboard.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;

@@ -1,6 +1,6 @@
 ﻿using BillWare.Application.Features.Dashboard.Models;
 
-namespace BillWare.Application.Interfaces
+namespace BillWare.Application.Contracts.Persistence
 {
     public interface IDashboardRepository
     {

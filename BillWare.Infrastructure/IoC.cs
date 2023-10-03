@@ -1,6 +1,5 @@
 ﻿using BillWare.Application.Common.Models;
-using BillWare.Application.Contracts;
-using BillWare.Application.Interfaces;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Infrastructure.Context;
 using BillWare.Infrastructure.Repository;
 using BillWare.Infrastructure.Services;
@@ -14,8 +13,6 @@ namespace BillWare.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<EmailSettings>(configuration.GetSection("MailSettings"));
-            
             services.AddDbContext<BillWareDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("BillWareDatabase")));
 
@@ -29,7 +26,7 @@ namespace BillWare.Infrastructure
 
             services.AddScoped<IInventoryRepository, InventoryRepository>();
 
-            services.AddScoped<IEmailServices, EmailServices>();
+            services.Configure<EmailSettings>(configuration.GetSection("MailSettings"));
 
             return services;
         }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Features.Inventory.Models;
 using BillWare.Application.Features.Inventory.Query;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

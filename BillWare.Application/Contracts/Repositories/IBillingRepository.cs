@@ -1,8 +1,7 @@
-﻿using BillWare.Application.Contracts;
-using BillWare.Application.Features.Billing.Entities;
+﻿using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
 
-namespace BillWare.Application.Interfaces
+namespace BillWare.Application.Contracts.Persistence
 {
     public interface IBillingRepository : IBaseCrudRepository<BillingEntity>
     {

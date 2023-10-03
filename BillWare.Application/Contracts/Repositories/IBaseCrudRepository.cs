@@ -1,6 +1,8 @@
 ﻿using BillWare.Application.Shared.Entities;
+using BillWare.Application.Specifications;
+using System.Linq.Expressions;
 
-namespace BillWare.Application.Contracts
+namespace BillWare.Application.Contracts.Persistence
 {
     public interface IBaseCrudRepository<TEntity> where TEntity : BaseEntity
     {
@@ -8,6 +10,7 @@ namespace BillWare.Application.Contracts
         Task<bool> DeleteEntityByIdAsync(TEntity entity);
         Task<TEntity> GetEntityByIdAsync(int id);
         Task<TEntity> UpdateEntityAsync(TEntity entity);
+
         Task<PaginationResult<TEntity>> GetEntitiesPagedWithSearch(string searchValue, int pageIndex, int pageSize);
         Task<PaginationResult<TEntity>> GetEntitiesPaged(int pageIndex, int pageSize);
     }

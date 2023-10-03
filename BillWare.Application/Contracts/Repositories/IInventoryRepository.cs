@@ -1,7 +1,6 @@
-﻿using BillWare.Application.Contracts;
-using BillWare.Application.Features.Inventory.Entities;
+﻿using BillWare.Application.Features.Inventory.Entities;
 
-namespace BillWare.Application.Interfaces
+namespace BillWare.Application.Contracts.Persistence
 {
     public interface IInventoryRepository : IBaseCrudRepository<InventoryEntity>
     {

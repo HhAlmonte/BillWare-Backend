@@ -1,7 +1,7 @@
-﻿using BillWare.Application.Exceptions;
+﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Security.Command;
 using BillWare.Application.Features.Security.Entities;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +25,7 @@ namespace BillWare.Application.Features.Security.Handler
             if (userToDelete == null)
             {
                 _logger.LogError($"{request.Id}, no se encuentra en el sistema.");
-                throw new NotFoundException(nameof(UserIdentity), request.Id);
+                throw new NotFoundException(nameof(ApplicationUser), request.Id);
             }
 
             var userDeleted = await _userRepository.DeleteUser(userToDelete);

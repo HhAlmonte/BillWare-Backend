@@ -1,10 +1,14 @@
-﻿using BillWare.Application.Features.Security.Command;
+﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Features.Security.Command;
 using BillWare.Application.Features.Security.Models;
 using BillWare.Application.Features.Security.Query;
+using BillWare.Application.Features.User.Models;
+using BillWare.Application.Features.User.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace BillWare.API.Controllers
 {
@@ -17,6 +21,20 @@ namespace BillWare.API.Controllers
         public UserController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet("GetCurrentUser")]
+        [ProducesResponseType(typeof(UserAuthResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<UserAuthResponse>> GetCurrentUser()
+        {
+            var query = new GetCurrentUserQuery
+            {
+                User = User
+            };
+
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
 
         [Authorize(Roles = "Administrator")]

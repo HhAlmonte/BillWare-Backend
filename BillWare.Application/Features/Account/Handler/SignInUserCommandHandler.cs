@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using BillWare.Application.Contracts;
+using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Service;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Account.Command;
 using BillWare.Application.Features.Account.Models;
-using BillWare.Application.Features.Security.Entities;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -18,13 +17,13 @@ namespace BillWare.Application.Features.Account.Handler
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly ILogger<SignInUserCommandHandler> _logger;
-        private readonly UserManager<UserIdentity> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public SignInUserCommandHandler(IAuthService authService, 
-                                        IMapper mapper, 
-                                        IUserRepository userRepository, 
+        public SignInUserCommandHandler(IAuthService authService,
+                                        IMapper mapper,
+                                        IUserRepository userRepository,
                                         ITokenService tokenService,
-                                        UserManager<UserIdentity> userManager,
+                                        UserManager<IdentityUser> userManager,
                                         ILogger<SignInUserCommandHandler> logger)
         {
             _tokenService = tokenService;
@@ -53,7 +52,12 @@ namespace BillWare.Application.Features.Account.Handler
 
                 var authResponseMapped = _mapper.Map<AuthResponse>(existingUser);
                 authResponseMapped.Role = userRole.FirstOrDefault() ?? "";
-                authResponseMapped.Token = await _tokenService.GenerateToken(existingUser);
+
+                var tokens = await _tokenService.GenerateToken(existingUser);
+
+                authResponseMapped.Token = tokens.Item1;
+                authResponseMapped.RefreshToken = tokens.Item2;
+                authResponseMapped.Success = true;
 
                 _logger.LogInformation($"El usuario {existingUser.Email} se ha logueado correctamente");
 

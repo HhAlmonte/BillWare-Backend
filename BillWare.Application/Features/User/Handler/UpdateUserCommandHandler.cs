@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Security.Command;
 using BillWare.Application.Features.Security.Entities;
 using BillWare.Application.Features.Security.Models;
-using BillWare.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace BillWare.Application.Features.Security.Handler
@@ -31,10 +32,10 @@ namespace BillWare.Application.Features.Security.Handler
             if (userToUpdate == null)
             {
                 _logger.LogError($"{request.Id}, no se encuentra en el sistema.");
-                throw new NotFoundException(nameof(UserIdentity), request.Id);
+                throw new NotFoundException(nameof(ApplicationUser), request.Id);
             }
 
-            var userMapped = _mapper.Map<UserIdentity>(request);
+            var userMapped = _mapper.Map<IdentityUser>(request);
 
             var userUpdated = await _userRepository.UpdateUser(userMapped);
 

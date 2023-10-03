@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Features.Security.Models;
 using BillWare.Application.Features.Security.Query;
-using BillWare.Application.Interfaces;
 using MediatR;
 
 namespace BillWare.Application.Features.Security.Handler

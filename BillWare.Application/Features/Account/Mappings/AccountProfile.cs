@@ -2,6 +2,7 @@
 using BillWare.Application.Features.Account.Command;
 using BillWare.Application.Features.Account.Models;
 using BillWare.Application.Features.Security.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace BillWare.Application.Features.Account.Mappings
 {
@@ -9,8 +10,9 @@ namespace BillWare.Application.Features.Account.Mappings
     {
         public AccountProfile()
         {
-            CreateMap<RegisterUserCommand, UserIdentity>().ReverseMap();
-            CreateMap<AuthResponse, UserIdentity>().ReverseMap();
+            CreateMap<RegisterUserCommand, ApplicationUser>().ReverseMap();
+            CreateMap<AuthResponse, ApplicationUser>().ReverseMap();
+            CreateMap<AuthResponse, IdentityUser>().ReverseMap();
         }
     }
 }

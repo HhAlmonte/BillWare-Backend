@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using BillWare.Application.Common.Enum;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

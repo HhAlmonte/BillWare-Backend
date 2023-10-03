@@ -1,7 +1,7 @@
-﻿using BillWare.Application.Exceptions;
+﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Models;
-using BillWare.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

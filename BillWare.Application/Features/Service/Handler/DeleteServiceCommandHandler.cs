@@ -1,4 +1,4 @@
-﻿using BillWare.Application.Contracts;
+﻿using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.BillingService.Command;
 using BillWare.Application.Features.BillingService.Entities;

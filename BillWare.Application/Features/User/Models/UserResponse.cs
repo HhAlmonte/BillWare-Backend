@@ -1,5 +1,4 @@
 ﻿using BillWare.Application.Common.Models;
-using BillWare.Application.Shared.Models;
 
 namespace BillWare.Application.Features.Security.Models
 {

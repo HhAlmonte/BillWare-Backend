@@ -9,12 +9,12 @@ namespace BillWare.Application.Features.Security.Mappings
     {
         public UserProfile()
         {
-            CreateMap<UserIdentity, UserResponse>();
+            CreateMap<ApplicationUser, UserResponse>();
 
-            CreateMap<UserIdentity, UpdateUserComand>()
+            CreateMap<ApplicationUser, UpdateUserComand>()
                 .ReverseMap();
 
-            CreateMap<PaginationResult<UserIdentity>, PaginationResult<UserResponse>>();
+            CreateMap<PaginationResult<ApplicationUser>, PaginationResult<UserResponse>>();
         }
     }
 }

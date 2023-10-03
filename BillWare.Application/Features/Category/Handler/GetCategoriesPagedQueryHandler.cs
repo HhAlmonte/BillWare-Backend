@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BillWare.Application.Contracts;
+using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Features.Category.Entities;
 using BillWare.Application.Features.Category.Models;
 using BillWare.Application.Features.Category.Query;

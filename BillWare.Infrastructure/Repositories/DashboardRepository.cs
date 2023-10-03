@@ -1,7 +1,7 @@
-﻿using BillWare.Application.Exceptions;
+﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Dashboard.Models;
-using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,9 +29,6 @@ namespace BillWare.Infrastructure.Repository
                     Amount = group.Sum(v => v.TotalPriceWithTax)
                 }).ToListAsync();
 
-            if(salesPerMonth == null)
-                throw new ValidationException("No se encontraron ventas");
-
             return salesPerMonth;
         }
 
@@ -46,9 +43,6 @@ namespace BillWare.Infrastructure.Repository
                         SaleDate = group.Key.ToString("dd/MM/yyyy"),
                         Amount = group.Sum(v => v.TotalPriceWithTax)
                     }).ToListAsync();
-
-            if(salesPerDay == null)
-                throw new ValidationException("No se encontraron ventas");
 
             return salesPerDay;
         }

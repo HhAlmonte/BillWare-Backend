@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Service;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Account.Command;
 using BillWare.Application.Features.Account.Models;
 using BillWare.Application.Features.Security.Entities;
-using BillWare.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace BillWare.Application.Features.Account.Handler
@@ -37,28 +39,36 @@ namespace BillWare.Application.Features.Account.Handler
                 throw new ValidationException($"El usuario con correo: {userExist.Email} ya existe");
             }
 
-            var userToCreate = _mapper.Map<UserIdentity>(request);
+            var userIdentityToCreate = new IdentityUser
+            {
+                Email = request.Email,
+                UserName = request.UserName,
+                EmailConfirmed = true
+            };
 
-            userToCreate.EmailConfirmed = true;
-            userToCreate.CreatedAt = DateTime.Now;
-
-            var result = await _authService.Register(userToCreate, request.Password);
+            var result = await _authService.Register(userIdentityToCreate, request.Password);
 
             if (result.Succeeded)
             {
-                await _authService.AddUserToRole(userToCreate, request.Role);
+                var applicationUser = _mapper.Map<ApplicationUser>(request);
+
+                applicationUser.IdentityId = new Guid(userIdentityToCreate.Id);
+
+                await _authService.AddApplicationUser(applicationUser);
+
+                await _authService.AddUserToRole(userIdentityToCreate, request.Role);
 
                 return new RegistrationResponse
                 {
-                    UserId = userToCreate.Id,
-                    Email = userToCreate.Email ?? "",
-                    UserName = userToCreate.UserName ?? "",
+                    UserId = userIdentityToCreate.Id,
+                    Email = userIdentityToCreate.Email ?? "",
+                    UserName = userIdentityToCreate.UserName ?? "",
                     Token = "El Usuario debe iniciar sesión para obtener el token"
                 };
             }
 
-            _logger.LogError($"El usuario con correo: {userToCreate.Email} no pudo ser creado");
-            throw new ValidationException($"El usuario con correo: {userToCreate.Email} no pudo ser creado");
+            _logger.LogError($"El usuario con correo: {userIdentityToCreate.Email} no pudo ser creado");
+            throw new ValidationException($"El usuario con correo: {userIdentityToCreate.Email} no pudo ser creado");
         }
     }
 }

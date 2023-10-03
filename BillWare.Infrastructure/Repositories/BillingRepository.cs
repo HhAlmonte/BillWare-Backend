@@ -1,6 +1,6 @@
-﻿using BillWare.Application.Features.Billing.Entities;
+﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
-using BillWare.Application.Interfaces;
 using BillWare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
