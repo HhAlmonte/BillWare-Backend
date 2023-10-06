@@ -8,12 +8,18 @@ namespace BillWare.Application.Features.Account.Validators
         public SignInUserCommandValidator()
         {
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("{Email} no puede estar en blanco")
-                .NotNull();
+                .EmailAddress()
+                .WithMessage("Correo no es válido")
+                .NotEmpty()
+                .WithMessage("Correo no puede estar en blanco")
+                .NotNull()
+                .WithMessage("Correo no puede estar en blanco");
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("{Password} no puede estar en blanco")
-                .NotNull();
+                .NotEmpty()
+                .WithMessage("Contraseña no puede estar en blanco")
+                .NotNull()
+                .WithMessage("Contraseña no puede estar en blanco");
         }
     }
 }

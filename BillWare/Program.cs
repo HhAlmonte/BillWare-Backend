@@ -2,6 +2,7 @@ using BillWare.API.Middleware;
 using BillWare.Application;
 using BillWare.Infrastructure;
 using BillWare.Infrastructure.Security;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,16 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+/*
+builder.Services
+       .AddRateLimiter(o => o
+       .AddFixedWindowLimiter(policyName: "rate-fixed",
+       options =>
+       {
+           options.PermitLimit = 10;
+           options.Window = TimeSpan.FromSeconds(5);
+           options.QueueLimit = 2;
+       }));*/
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -61,6 +72,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+/*app.UseRateLimiter();*/
 
 app.UseMiddleware<ExceptionMiddleware>();
 

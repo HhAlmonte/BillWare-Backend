@@ -31,17 +31,22 @@ namespace BillWare.API.Middleware
                 var statusCode = (int)HttpStatusCode.InternalServerError;
                 var result = string.Empty;
 
+                var titleMessageError = "Se presentaron uno o más errores de validación";
+
                 switch (ex)
                 {
                     case NotFoundException notFoundException:
                         statusCode = (int)HttpStatusCode.NotFound;
+                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, titleMessageError, notFoundException.Message));
                         break;
                     case ValidationException validationException:
+                        var errorsText = string.Join(" - ", validationException.Errors.Select(kv => $"{string.Join(" y ", kv.Value)}"));
                         statusCode = (int)HttpStatusCode.BadRequest;
-                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, ex.Message, validationException.Errors));
+                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, ex.Message, errorsText));
                         break;
                     case BadRequestException badRequestException:
                         statusCode = (int)HttpStatusCode.BadRequest;
+                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, titleMessageError, badRequestException.Message));
                         break;
                     default:
                         break;

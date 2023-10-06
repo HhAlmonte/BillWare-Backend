@@ -41,7 +41,7 @@ namespace BillWare.Application.Features.Account.Handler
             if (existingUser == null)
             {
                 _logger.LogError($"El usuario con Email {request.Email} no existe");
-                throw new NotFoundException(nameof(AuthRequest), existingUser.Email);
+                throw new NotFoundException($"El usuario {request.Email} no existe");
             }
 
             var authResponse = await _authService.Login(existingUser, request.Password);

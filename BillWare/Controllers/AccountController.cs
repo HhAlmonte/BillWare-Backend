@@ -43,7 +43,7 @@ namespace BillWare.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("refres-token")]
+        [HttpPost("refresh-token")]
         [ProducesResponseType(typeof(RegistrationResponse), (int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<RegistrationResponse>> RefreshToken(TokenRequest tokenRequest)

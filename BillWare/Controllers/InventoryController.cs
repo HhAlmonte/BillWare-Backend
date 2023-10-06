@@ -9,7 +9,7 @@ using System.Net;
 
 namespace BillWare.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route($"api/[controller]")]
     [ApiController]
     public class InventoryController : ControllerBase
     {
