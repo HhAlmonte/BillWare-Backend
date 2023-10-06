@@ -46,14 +46,18 @@ namespace BillWare.Infrastructure.Repository
 
         public async Task<PaginationResult<TEntity>> GetEntitiesPaged(int pageIndex, int pageSize)
         {
-            var entityList = await _dbSet.GetPage(pageIndex, pageSize);
+            var entityList = await _dbSet
+                .AsNoTracking()
+                .GetPage(pageIndex, pageSize);
 
             return entityList;
         }
 
         public async Task<PaginationResult<TEntity>> GetEntitiesPagedWithSearch(string searchValue, int pageIndex, int pageSize)
         {
-            var query = _dbSet.AsQueryable();
+            var query = _dbSet
+                .AsNoTracking()
+                .AsQueryable();
 
             int intValue;
             bool isInt = int.TryParse(searchValue, out intValue);
@@ -77,7 +81,9 @@ namespace BillWare.Infrastructure.Repository
 
         public async Task<TEntity> GetEntityByIdAsync(int id)
         {
-            var entity = await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
+            var entity = await _dbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(entity => entity.Id == id);
 
             if (entity == null) throw new Exception("Entity not found");
 
