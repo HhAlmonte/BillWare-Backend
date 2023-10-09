@@ -29,14 +29,14 @@ namespace BillWare.Infrastructure.Security.Repository
         {
             var user = await _context.Users.FindAsync(id);
 
-            return user;
+            return user!;
         }
 
         public async Task<IdentityUser> GetUserByEmail(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            return user;
+            return user!;
         }
 
         public async Task<PaginationResult<IdentityUser>> GetUsersPaged(int pageIndex, int pageSize)
@@ -58,6 +58,22 @@ namespace BillWare.Infrastructure.Security.Repository
             await _context.SaveChangesAsync();
 
             return user;
+        }
+
+        public async Task<IdentityResult> AddUserToRole(IdentityUser user, string role)
+        {
+            var userRole = await _userManager.AddToRoleAsync(user, role);
+
+            return userRole;
+        }
+
+        public async Task<ApplicationUser> AddApplicationUser(ApplicationUser applicationUser)
+        {
+            await _context!.ApplicationUsers!.AddAsync(applicationUser);
+
+            await _context.SaveChangesAsync();
+
+            return applicationUser;
         }
     }
 }

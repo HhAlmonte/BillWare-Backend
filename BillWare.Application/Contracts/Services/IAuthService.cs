@@ -7,7 +7,5 @@ namespace BillWare.Application.Contracts.Service
     {
         Task<SignInResult> Login(IdentityUser user, string password);
         Task<IdentityResult> Register(IdentityUser user, string password);
-        Task<IdentityResult> AddUserToRole(IdentityUser user, string role);
-        Task<ApplicationUser> AddApplicationUser(ApplicationUser applicationUser);
     }
 }

@@ -54,8 +54,8 @@ namespace BillWare.Identity.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("Id", user.Id),
-                    new Claim(JwtRegisteredClaimNames.Email, user!.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user!.Email),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 }.Union(userClaims).Union(roleClaims)),
                 Expires = DateTime.UtcNow.Add(_jwtSettings.ExpireTime),
@@ -116,7 +116,7 @@ namespace BillWare.Identity.Services
                 }
 
                 // date expiration validation
-                var utcExpiryDate = long.Parse(tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+                var utcExpiryDate = long.Parse(tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp)!.Value);
 
                 var expiryDate = UnixTimeStamToDateTime(utcExpiryDate);
 
@@ -177,7 +177,7 @@ namespace BillWare.Identity.Services
 
                 // validar el id del token
 
-                var jti = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+                var jti = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)!.Value;
 
                 if(storedToken.JwtId != jti)
                 {
@@ -207,16 +207,16 @@ namespace BillWare.Identity.Services
                 _securityDbContext.RefreshTokens!.Update(storedToken);
                 await _securityDbContext.SaveChangesAsync();
 
-                var user = await _userManager.FindByIdAsync(storedToken.UserId);
+                var user = await _userManager.FindByIdAsync(storedToken.UserId!);
 
-                var token = await GenerateToken(user);
+                var token = await GenerateToken(user!);
 
                 return new AuthResponse
                 {
-                    Id = user.Id,
+                    Id = user!.Id,
                     Token = token.Item1,
-                    Email = user.Email,
-                    UserName = user.UserName,
+                    Email = user.Email!,
+                    UserName = user.UserName!,
                     RefreshToken = token.Item2,
                     Success = true
                 };

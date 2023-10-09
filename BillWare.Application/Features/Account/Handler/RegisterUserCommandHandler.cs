@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Repositories;
 using BillWare.Application.Contracts.Service;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Account.Command;
@@ -17,12 +18,15 @@ namespace BillWare.Application.Features.Account.Handler
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RegisterUserCommandHandler> _logger;
+        private readonly IRoleRepository _roleRepository;
 
         public RegisterUserCommandHandler(IAuthService authService,
                                           IUserRepository userRepository,
                                           IMapper mapper,
+                                          IRoleRepository roleRepository,
                                           ILogger<RegisterUserCommandHandler> logger)
         {
+            _roleRepository = roleRepository;
             _mapper = mapper;
             _userRepository = userRepository;
             _authService = authService;
@@ -54,9 +58,9 @@ namespace BillWare.Application.Features.Account.Handler
 
                 applicationUser.IdentityId = new Guid(userIdentityToCreate.Id);
 
-                await _authService.AddApplicationUser(applicationUser);
+                await _userRepository.AddApplicationUser(applicationUser);
 
-                await _authService.AddUserToRole(userIdentityToCreate, request.Role);
+                await _userRepository.AddUserToRole(userIdentityToCreate, request.Role);
 
                 return new RegistrationResponse
                 {

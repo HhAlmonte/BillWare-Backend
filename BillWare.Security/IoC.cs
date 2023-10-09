@@ -1,6 +1,8 @@
 ﻿using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Repositories;
 using BillWare.Application.Contracts.Service;
 using BillWare.Application.Features.Account.Models;
+using BillWare.Identity.Repository;
 using BillWare.Identity.Services;
 using BillWare.Infrastructure.Security.Repository;
 using BillWare.Infrastructure.Security.Services;
@@ -27,9 +29,7 @@ namespace BillWare.Infrastructure.Security
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SecurityDbContext>();
 
-            /*services.AddIdentity<UserIdentity, IdentityRole>()
-                .AddEntityFrameworkStores<SecurityDbContext>()
-                .AddDefaultTokenProviders();*/
+            services.AddScoped<IRoleRepository, RoleRepository>();
 
             services.AddTransient<IAuthService, AuthService>();
 
@@ -38,7 +38,7 @@ namespace BillWare.Infrastructure.Security
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSetting:Key"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSetting:Key"]!)),
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,

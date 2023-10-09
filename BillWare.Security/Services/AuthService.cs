@@ -11,13 +11,10 @@ namespace BillWare.Infrastructure.Security.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly SecurityDbContext _securityDbContext;
 
         public AuthService(UserManager<IdentityUser> userManager,
-                           SignInManager<IdentityUser> signInManager,
-                           SecurityDbContext securityDbContext)
+                           SignInManager<IdentityUser> signInManager)
         {
-            _securityDbContext = securityDbContext;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -34,22 +31,6 @@ namespace BillWare.Infrastructure.Security.Services
             var userCreated = await _userManager.CreateAsync(user, password);
 
             return userCreated;
-        }
-
-        public async Task<IdentityResult> AddUserToRole(IdentityUser user, string role)
-        {
-            var userRole = await _userManager.AddToRoleAsync(user, role);
-
-            return userRole;
-        }
-
-        public async Task<ApplicationUser> AddApplicationUser(ApplicationUser applicationUser)
-        {
-            await _securityDbContext!.ApplicationUsers!.AddAsync(applicationUser);
-
-            await _securityDbContext.SaveChangesAsync();
-
-            return applicationUser;
         }
     }
 }

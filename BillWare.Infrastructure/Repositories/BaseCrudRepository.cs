@@ -19,11 +19,11 @@ namespace BillWare.Infrastructure.Repository
 
         public async Task<TEntity> CreateEntityAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            var response = await _dbSet.AddAsync(entity);
 
             await _dbContext.SaveChangesAsync();
 
-            return entity;
+            return response.Entity;
         }
 
         public async Task<bool> DeleteEntityByIdAsync(TEntity entity)

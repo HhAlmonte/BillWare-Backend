@@ -9,11 +9,21 @@ namespace BillWare.Application.Features.BillingService.Validators
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage("{Name} no puede estar en blanco");
+                .WithMessage("Nombre no puede estar en blanco")
+                .NotNull()
+                .WithMessage("Nombre no puede ser nulo");
 
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessage("{Description} no puede estar en blanco");
+                .WithMessage("Descripción no puede estar en blanco")
+                .NotNull()
+                .WithMessage("Descripción no puede ser nulo");
+
+            RuleFor(x => x.Price)
+                .NotEmpty()
+                .WithMessage("Precio no puede estar en blanco")
+                .NotNull()
+                .WithMessage("Precio no puede ser nulo");
         }
     }
 }
