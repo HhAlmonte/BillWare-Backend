@@ -8,7 +8,7 @@ namespace BillWare.Application.Features.Billing.Command
     {
         public int Id { get; set; }
 
-        public CostumerRequest Costumer { get; set; } = new CostumerRequest();
+        public int CostumerId { get; set; }
 
         public string SellerName { get; set; } = string.Empty;
         public string InvoiceNumber { get; set; } = string.Empty;

@@ -13,7 +13,5 @@
             get => _pageSize;
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value ?? 10;
         }
-
-        private string? _search;
     }
 }

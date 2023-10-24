@@ -1,6 +1,8 @@
 ﻿using BillWare.Application.Common.Models;
 using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Repositories;
 using BillWare.Infrastructure.Context;
+using BillWare.Infrastructure.Repositories;
 using BillWare.Infrastructure.Repository;
 using BillWare.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,8 @@ namespace BillWare.Infrastructure
             services.AddScoped(typeof(IBaseCrudRepository<>), typeof(BaseCrudRepository<>));
 
             services.AddScoped<IBillWareDbContext, BillWareDbContext>();
+
+            services.AddScoped<IHoraExtraRepository, HoraExtraRepository>();
 
             services.AddScoped<IDashboardRepository, DashboardRepository>();
 

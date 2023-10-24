@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BillWare.Application.Contracts.Persistence;
-using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Costumer.Command;
 using BillWare.Application.Features.Costumer.Entities;
 using BillWare.Application.Features.Costumer.Models;

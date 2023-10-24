@@ -43,7 +43,7 @@ namespace BillWare.Application.Features.Billing.Handler
             if (billingFromDb == null)
             {
                 _logger.LogError($"{billing.Id} factura no existe en el sistema");
-                throw new NotFoundException(nameof(BillingRequest), billing.Id);
+                throw new NotFoundException(nameof(CreateBillingCommand), billing.Id);
             }
 
             var updatedBilling = await _billingRepository.UpdateEntityAsync(billing);

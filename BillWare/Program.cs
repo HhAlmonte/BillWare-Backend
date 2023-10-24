@@ -2,7 +2,6 @@ using BillWare.API.Middleware;
 using BillWare.Application;
 using BillWare.Infrastructure;
 using BillWare.Infrastructure.Security;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -7,11 +7,6 @@ namespace BillWare.Application.Features.Billing.Validators
     {
         public CreateBillingCommandValidator()
         {
-            RuleFor(p => p.Costumer)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("{Costumer} no puede estar en blanco");
-
             RuleFor(p => p.SellerName)
                 .NotEmpty()
                 .WithMessage("{SellerName} no puede estar en blanco");
@@ -23,14 +18,6 @@ namespace BillWare.Application.Features.Billing.Validators
             RuleFor(p => p.TotalPrice)
                 .GreaterThan(0)
                 .WithMessage("{TotalPrice} es requerido");
-
-            RuleFor(p => p.TotalPriceWithTax)
-                .GreaterThan(0)
-                .WithMessage("{TotalPriceWithTax} es requerido");
-
-            RuleFor(p => p.TotalTax)
-                .GreaterThan(0)
-                .WithMessage("{TotalTax} es requerido");
 
             RuleFor(p => p.PaymentMethod)
                 .NotNull()

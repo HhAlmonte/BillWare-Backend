@@ -18,6 +18,7 @@ namespace BillWare.Infrastructure.Repository
         public async Task<PaginationResult<BillingEntity>> GetBillingsPagedWithParams(ParamsRequest @params)
         {
             var billings = _dbSet
+                .Include(x => x.Costumer)
                 .Include(x => x.BillingItems)
                 .AsQueryable();
 
@@ -45,6 +46,7 @@ namespace BillWare.Infrastructure.Repository
         {
             var billings = await _dbSet
                 .Include(x => x.BillingItems)
+                .Include(x => x.Costumer)
                 .OrderByDescending(x => x.CreatedAt)
                 .GetPage(pageIndex, pageSize);
 

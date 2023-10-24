@@ -1,7 +1,6 @@
 ﻿using BillWare.Application.Contracts.Persistence;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Command;
-using BillWare.Application.Features.Billing.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -29,7 +28,7 @@ namespace BillWare.Application.Features.Billing.Handler
             if (billing == null)
             {
                 _logger.LogError($"{request.Id} factura no existe en el sistema");
-                throw new NotFoundException(nameof(BillingRequest), request.Id);
+                throw new NotFoundException(nameof(CreateBillingCommand), request.Id);
             }
             else
             {

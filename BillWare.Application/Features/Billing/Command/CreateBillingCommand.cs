@@ -1,15 +1,12 @@
 ﻿using BillWare.Application.Common.Enum;
-using BillWare.Application.Features.Billing.Entities;
 using BillWare.Application.Features.Billing.Models;
-using BillWare.Application.Features.Costumer.Entities;
 using MediatR;
 
 namespace BillWare.Application.Features.Billing.Command
 {
     public class CreateBillingCommand : IRequest<BillingResponse>
     {
-        public CostumerRequest Costumer { get; set; } = new CostumerRequest();
-
+        public int CostumerId { get; set; }
         public string SellerName { get; set; } = string.Empty;
         public string InvoiceNumber { get; set; } = string.Empty;
         public decimal TotalPrice { get; set; }

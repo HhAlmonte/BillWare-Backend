@@ -7,7 +7,8 @@ namespace BillWare.Application.Features.Billing.Entities
 {
     public class BillingEntity : BaseEntity
     {
-        public CostumerEntity Costumer { get; set; }
+        public int CostumerId { get; set; }
+        public CostumerEntity? Costumer { get; set; }
 
         [MaxLength(100)] public string SellerName { get; set; } = string.Empty;
         [MaxLength(100)] public string InvoiceNumber { get; set; } = string.Empty;

@@ -20,7 +20,7 @@ namespace BillWare.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetById")]
+        [HttpGet("GetById/{id}")]
         [ProducesResponseType(typeof(CostumerResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CostumerResponse>> GetCostumerById(int id)
         {

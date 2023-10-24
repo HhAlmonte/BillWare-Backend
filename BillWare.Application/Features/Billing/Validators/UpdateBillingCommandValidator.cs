@@ -11,11 +11,6 @@ namespace BillWare.Application.Features.Billing.Validators
                 .GreaterThan(0)
                 .WithMessage("{Id} es requerido");
 
-            RuleFor(p => p.Costumer)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("{Costumer} no puede estar en blanco");
-
             RuleFor(p => p.SellerName)
                 .NotEmpty()
                 .WithMessage("{SellerName} no puede estar en blanco");

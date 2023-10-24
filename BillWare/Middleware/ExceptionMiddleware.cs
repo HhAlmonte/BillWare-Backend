@@ -9,12 +9,15 @@ namespace BillWare.API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly IHostEnvironment _env;
 
-        public ExceptionMiddleware(RequestDelegate next, 
-                                   ILogger<ExceptionMiddleware> logger)
+        public ExceptionMiddleware(RequestDelegate next,
+                                   ILogger<ExceptionMiddleware> logger,
+                                   IHostEnvironment env)
         {
             _logger = logger;
             _next = next;
+            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -53,7 +56,16 @@ namespace BillWare.API.Middleware
                 }
 
                 if (string.IsNullOrEmpty(result))
-                    result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, ex.Message, ex.StackTrace));
+                {
+                    if(_env.IsDevelopment())
+                    {
+                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, ex.Message, ex.StackTrace?.ToString()));
+                    }
+                    else
+                    {
+                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, titleMessageError, "Ha ocurrido un error en el lado del servidor. Contáctese con el administrador del sistema."));
+                    }
+                }
                 
                 context.Response.StatusCode = statusCode;
 
