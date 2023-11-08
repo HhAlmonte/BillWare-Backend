@@ -41,7 +41,7 @@ namespace BillWare.Application.Features.Security.Handler
 
             var userResponse = _mapper.Map<UserResponse>(userUpdated);
 
-            _logger.LogInformation($"{userResponse.Id}, actualizado correctamente.");
+            _logger.LogInformation($"{userResponse.IdentityId}, actualizado correctamente.");
 
             return userResponse;
         }

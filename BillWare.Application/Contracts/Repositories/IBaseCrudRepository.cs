@@ -1,6 +1,4 @@
 ﻿using BillWare.Application.Shared.Entities;
-using BillWare.Application.Specifications;
-using System.Linq.Expressions;
 
 namespace BillWare.Application.Contracts.Persistence
 {

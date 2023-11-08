@@ -5,7 +5,7 @@ namespace BillWare.Application.Contracts.Persistence
 {
     public interface IUserRepository
     {
-        Task<PaginationResult<IdentityUser>> GetUsersPaged(int pageIndex, int pageSize);
+        Task<PaginationResult<ApplicationUser>> GetUsersPaged(int pageIndex, int pageSize);
         Task<PaginationResult<IdentityUser>> GetUsersPagedWithSearch(int pageIndex, int pageSize, string search);
         Task<IdentityUser> UpdateUser(IdentityUser user);
         Task<IdentityUser> GetUserById(string id);

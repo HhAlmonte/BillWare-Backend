@@ -34,14 +34,17 @@ namespace BillWare.Infrastructure.Security.Repository
 
         public async Task<IdentityUser> GetUserByEmail(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager
+                .FindByEmailAsync(email);
 
             return user!;
         }
 
-        public async Task<PaginationResult<IdentityUser>> GetUsersPaged(int pageIndex, int pageSize)
+        public async Task<PaginationResult<ApplicationUser>> GetUsersPaged(int pageIndex, int pageSize)
         {
-            var usersPaged = await _context.Users.GetPage(pageIndex, pageSize);
+            var usersPaged = await _context
+                .ApplicationUsers!
+                .GetPage(pageIndex, pageSize);
 
             return usersPaged;
         }

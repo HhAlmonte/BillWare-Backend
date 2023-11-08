@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using BillWare.Application.Common.Enum;
 using BillWare.Application.Contracts.Persistence;
-using BillWare.Application.Contracts.Service;
 using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Billing.Command;
 using BillWare.Application.Features.Billing.Entities;

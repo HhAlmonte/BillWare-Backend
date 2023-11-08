@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BillWare.Application.Features.Security.Command;
 using BillWare.Application.Features.Security.Entities;
 using BillWare.Application.Features.Security.Models;
 
@@ -9,12 +8,10 @@ namespace BillWare.Application.Features.Security.Mappings
     {
         public UserProfile()
         {
-            CreateMap<ApplicationUser, UserResponse>();
-
-            CreateMap<ApplicationUser, UpdateUserComand>()
+            CreateMap<PaginationResult<ApplicationUser>, PaginationResult<UserResponse>>()
                 .ReverseMap();
 
-            CreateMap<PaginationResult<ApplicationUser>, PaginationResult<UserResponse>>();
+            CreateMap<ApplicationUser, UserResponse>().ReverseMap();
         }
     }
 }

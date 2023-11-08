@@ -3,11 +3,9 @@ using BillWare.Application.Features.BillingService.Entities;
 using BillWare.Application.Features.Category.Entities;
 using BillWare.Application.Features.Costumer.Entities;
 using BillWare.Application.Features.Inventory.Entities;
-using BillWare.Application.HoraExtra.Entities;
 using BillWare.Application.Shared.Entities;
 using BillWare.Infrastructure.Context.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BillWare.Infrastructure.Context
 {
@@ -23,9 +21,7 @@ namespace BillWare.Infrastructure.Context
         {
         }
 
-        public DbSet<Emplooye> Emplooyes { get; set; }
-        public DbSet<Supervisor> Supervisors { get; set; }
-        public DbSet<HoraExtraEntity> HoraExtras { get; set; }
+
         public DbSet<CostumerEntity> Costumers { get; set; }
         public DbSet<InventoryEntity> Inventories { get; set; }
         public DbSet<ServiceEntity> BillingService { get; set; }

@@ -14,8 +14,8 @@ namespace BillWare.Application.Features.Category.Handler
 
         public GetCategoriesPagedQueryHandler(IBaseCrudRepository<CategoryEntity> categoryRepository, IMapper mapper)
         {
-            _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<PaginationResult<CategoryResponse>> Handle(GetCategoriesPagedQuery request, CancellationToken cancellationToken)

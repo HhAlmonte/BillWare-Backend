@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BillWare.Application.Contracts.Persistence;
-using BillWare.Application.Exceptions;
 using BillWare.Application.Features.Category.Command;
 using BillWare.Application.Features.Category.Entities;
 using BillWare.Application.Features.Category.Models;
@@ -16,7 +15,7 @@ namespace BillWare.Application.Features.Category.Handler
         private readonly IMapper _mapper;
 
         public CreateCategoryCommandHandler(IBaseCrudRepository<CategoryEntity> categoryRepository,
-                                            ILogger<CreateCategoryCommandHandler> logger,   
+                                            ILogger<CreateCategoryCommandHandler> logger,
                                             IMapper mapper)
         {
             _logger = logger;
