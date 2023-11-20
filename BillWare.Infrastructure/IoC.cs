@@ -1,7 +1,12 @@
 ﻿using BillWare.Application.Common.Models;
 using BillWare.Application.Contracts.Persistence;
+using BillWare.Application.Contracts.Service;
+using BillWare.Application.Contracts.Services;
 using BillWare.Infrastructure.Context;
 using BillWare.Infrastructure.Repository;
+using BillWare.Infrastructure.Services;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +27,10 @@ namespace BillWare.Infrastructure
             services.AddScoped<IDashboardRepository, DashboardRepository>();
 
             services.AddScoped<IBillingRepository, BillingRepository>();
+
+            services.AddScoped<IHtmlService, HtmlService>();
+
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<IInventoryRepository, InventoryRepository>();
 

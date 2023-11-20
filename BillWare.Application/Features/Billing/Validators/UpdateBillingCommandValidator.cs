@@ -23,14 +23,6 @@ namespace BillWare.Application.Features.Billing.Validators
                 .GreaterThan(0)
                 .WithMessage("{TotalPrice} es requerido");
 
-            RuleFor(p => p.TotalPriceWithTax)
-                .GreaterThan(0)
-                .WithMessage("{TotalPriceWithTax} es requerido");
-
-            RuleFor(p => p.TotalTax)
-                .GreaterThan(0)
-                .WithMessage("{TotalTax} es requerido");
-
             RuleFor(p => p.PaymentMethod)
                 .NotNull()
                 .NotEmpty()

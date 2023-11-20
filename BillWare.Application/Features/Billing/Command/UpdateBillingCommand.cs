@@ -21,5 +21,7 @@ namespace BillWare.Application.Features.Billing.Command
         public List<BillingItemRequest> BillingItems { get; set; } = new List<BillingItemRequest>();
 
         public DateTime CreatedAt { get; set; }
+
+        public string? InvoiceHtmlContent { get; set; } = string.Empty;
     }
 }

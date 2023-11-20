@@ -15,7 +15,9 @@ namespace BillWare.Infrastructure.Services
             _emailSettings = emailSettings.Value;
         }
 
-        public async Task<bool> SendEmailAsync(string to, string subject, string body)
+        public async Task<bool> SendEmailAsync(string to, 
+                                               string subject, 
+                                               string body)
         {
             try
             {
@@ -46,7 +48,10 @@ namespace BillWare.Infrastructure.Services
             }
         }
 
-        public async Task<bool> SendEmailWithAttachmentsAsync(string to, string subject, string body, string pdfAttachments)
+        public async Task<bool> SendEmailWithAttachmentsAsync(string to, 
+                                                              string subject,
+                                                              string body,
+                                                              List<Attachment> attachments)
         {
             try
             {
@@ -66,12 +71,9 @@ namespace BillWare.Infrastructure.Services
 
                     message.To.Add(to);
 
-                    foreach (var pdfAttachmentBytes in pdfAttachments)
+                    foreach (var attachment in attachments)
                     {
-                        using (var ms = new MemoryStream(pdfAttachmentBytes))
-                        {
-                            message.Attachments.Add(new Attachment(ms, "archivo.pdf", "application/pdf"));
-                        }
+                        message.Attachments.Add(attachment);
                     }
 
                     await smtpClient.SendMailAsync(message);
@@ -85,7 +87,9 @@ namespace BillWare.Infrastructure.Services
             }
         }
 
-        public async Task<bool> SendHtmlEmailAsync(string to, string subject, string htmlBody)
+        public async Task<bool> SendHtmlEmailAsync(string to, 
+                                                   string subject, 
+                                                   string htmlBody)
         {
             try
             {

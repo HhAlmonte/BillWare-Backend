@@ -1,9 +1,5 @@
 ﻿using BillWare.Application.Contracts.Service;
-using BillWare.Application.Features.Account.Models;
-using BillWare.Application.Features.Security.Entities;
-using BillWare.Security.Context;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BillWare.Infrastructure.Security.Services
 {

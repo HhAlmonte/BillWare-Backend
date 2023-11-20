@@ -27,7 +27,8 @@ namespace BillWare.Infrastructure.Security
                 op.UseSqlServer(configuration.GetConnectionString("BillWareSecurityConnectionString"),
                 b => b.MigrationsAssembly(typeof(SecurityDbContext).Assembly.FullName)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SecurityDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<SecurityDbContext>();
 
             services.AddScoped<IRoleRepository, RoleRepository>();
 
@@ -53,7 +54,8 @@ namespace BillWare.Infrastructure.Security
                 op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 op.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(op =>
+            })
+            .AddJwtBearer(op =>
             {
                 op.RequireHttpsMetadata = false;
                 op.SaveToken = true;

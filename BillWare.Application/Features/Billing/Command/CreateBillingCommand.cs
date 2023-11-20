@@ -16,6 +16,8 @@ namespace BillWare.Application.Features.Billing.Command
         public PaymentMethod PaymentMethod { get; set; }
         public BillingStatus BillingStatus { get; set; }
         public List<BillingItemRequest> BillingItems { get; set; } = new List<BillingItemRequest>();
+
+        public string? InvoiceHtmlContent { get; set; } = string.Empty;
     }
 }
 
